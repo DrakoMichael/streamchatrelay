@@ -10,12 +10,8 @@ class main{
         if(config.type_ambience === "dev") {
             liveChatSpam();
         }
-
-        // await loadSettings();
         await websocket_bootstrap(config);
         await express_bootstrap(config);
-        // await startWebhook();
-        // await loadAlgumacoisa();
     };   
 };
  
