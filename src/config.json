@@ -1,0 +1,11 @@
+{
+  "type_ambience": "dev", 
+  "dev_config": {
+    "dev_websocket_port" : 8181,
+    "dev_express_port" : 3131,
+    "enable_spam": true,
+    "connected_chat_notify": true
+  },
+  "websocket_port": 8080,
+  "express_port": 3030
+}
