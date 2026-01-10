@@ -1,0 +1,11 @@
+{
+  "type_ambience": "backup", 
+  "dev_config": {
+    "dev_websocket_port" : 1000,
+    "dev_express_port" : 1001,
+    "enable_spam": false,
+    "connected_chat_notify": false
+  },
+  "websocket_port": 1000,
+  "express_port": 1001
+}

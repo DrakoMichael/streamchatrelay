@@ -1,6 +1,8 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
+import { marked } from 'marked';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename)
@@ -32,6 +34,12 @@ export default async function express_bootstrap(config) {
         );
         next();
         });
+
+        app.get('/help', (req, res) => {
+        const md = fs.readFileSync('../src/help.md', 'utf-8');
+        const html = marked(md);
+        res.send(`<html><body>${html}</body></html>`);
+});
 
     } catch (error) {
         console.log(error);
