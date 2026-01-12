@@ -1,5 +1,5 @@
 import config from "../../config.json" with { type: "json" };
-import websocket_bootstrap from "../websocket/websocket_bootstrap.js";
+import websocket_bootstrap from "../webSocket/websocket_bootstrap.js";
 
 const quotes = {
   nome: [
@@ -55,12 +55,14 @@ function pegarLinhaAleatoria(quotes) {
   };
 }
 
-function iniciarChatAleatorio(quotes, wsFunctions, minMs = 500, maxMs = 3000) {
+function iniciarChatAleatorio(quotes, wsFunctions, minMs = 0, maxMs = 500) {
   function loop() {
     const { usuario, mensagem } = pegarLinhaAleatoria(quotes);
     const msg = `${usuario}: ${mensagem}`;
 
-    console.log(msg);
+    if(config.dev_config.print_spam_chats) {
+      console.log(msg);
+    }
     wsFunctions.sendNewChat(msg);
 
     const proximoTempo = tempoAleatorio(minMs, maxMs);

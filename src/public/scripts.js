@@ -4,7 +4,7 @@ const chatHtml = document.getElementById("chat");
 const maxChatLength = 10;
 
 socket.onopen = () => {
-    console.log('Conectado ao servidor');
+//   console.log('Conectado ao servidor');
 //   socket.send('Olá, servidor!');
 };
 
@@ -34,6 +34,6 @@ function removeOldestFromPage() {
 
 function addOnPage(text) {
   const temp = document.createElement("p");
-  temp.textContent = text; // mais seguro que innerHTML
+  temp.textContent = text; // é mais seguro que innerHTML
   chatHtml.appendChild(temp);
 }

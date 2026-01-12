@@ -38,8 +38,13 @@ export default async function express_bootstrap(config) {
         app.get('/help', (req, res) => {
         const md = fs.readFileSync('../src/help.md', 'utf-8');
         const html = marked(md);
-        res.send(`<html><body>${html}</body></html>`);
-});
+        res.send(`<html><body>${html}</body></html>`); });
+
+        app.get('/ajuda', async (_req, res) => {
+        const md = fs.readFileSync('../src/help_BR.md', 'utf-8');
+        const html = marked(md);
+        res.send(`<html lang="pt-BR"><title>Ajuda PT BR</title><body>${html}</body></html>`)});
+
 
     } catch (error) {
         console.log(error);

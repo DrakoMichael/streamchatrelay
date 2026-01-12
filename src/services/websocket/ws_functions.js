@@ -23,7 +23,7 @@ export default class WsFunctions {
 
   onMessage(_ws, msg) {
     const text = msg.toString();
-    console.log("Mensagem:", text);
+    // console.log("Mensagem:", text);
 
     // broadcast da mensagem recebida
     this.sendNewChat(text);

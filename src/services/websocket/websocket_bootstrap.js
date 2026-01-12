@@ -13,3 +13,4 @@ export default function websocket_bootstrap(config) {
 
   return wsFunctionsInstance;
 }
+ 

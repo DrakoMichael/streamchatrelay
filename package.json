@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "express": "^5.2.1",
+    "fs": "^0.0.1-security",
+    "marked": "^17.0.1",
     "ws": "^8.18.3"
   }
 }
