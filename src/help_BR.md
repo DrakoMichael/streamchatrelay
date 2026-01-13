@@ -25,6 +25,11 @@ O arquivo de configuração possui a seguinte estrutura com suas respectivas aç
     "connected_chat_notify": true,  //printa no console se algum cliente(navegador) se conectou
     "print_spam_chats": false       //printa no console TODAS as mensagens geradas pelo gerador
   },
+  "data_control":{
+    "storage_messages_enabled": true,   //ativa o módulo de armazenamento de mensagem localmente (log)
+    "max_stored_messages": 200,         //número máximo de mensagens no arquivo
+    "message_cleanup_interval_ms": 5000 //tempo de varredura para exclusão dos arquivos
+  }
   "data_analysis": {                //conf de análise de dados
     "enable_data_analysis": false,  //ativa ou desativa o módulo de análise de dados (pode consumir processamento e memória)
     "data_analysis_interval_ms": 60000  //sera o valor em ms do intervalo em que sera capturado e armazenado dos dados
