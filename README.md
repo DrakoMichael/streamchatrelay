@@ -1,4 +1,5 @@
 # Stream Chat Relay
+![Stream Chat Relay Running]([https://link-do-gif.gif](https://i.imgur.com/PMoVbdU.gif))
 
 Uma aplicação em tempo real para retransmissão de mensagens de chat usando WebSocket e Express.js. O projeto permite que múltiplos clientes se conectem a um servidor central e compartilhem mensagens em tempo real.
 
