@@ -20,6 +20,9 @@ export default function dataControl(param,data) {
 
 function addChatToLog(params) {
   if (!config.data_control.storage_messages_enabled) return;
+  if(!fs.existsSync('../src/logs')){
+    fs.mkdirSync('../src/logs');
+  }
   const logEntry = `${new Date().toISOString()} - ${params}\n`;
   fs.appendFileSync('../src/logs/chat_log.txt', logEntry);
   healthCheck('chat_log');

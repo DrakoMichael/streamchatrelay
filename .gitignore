@@ -1,4 +1,10 @@
 node_modules/
 src/logs/*
+<<<<<<< HEAD
 src/.config.json.swp
 src/services/dataBase/*
+=======
+.env
+.DS_Store
+dist/
+>>>>>>> 13c63f6e3837fb0ac8d1667b9543c3333d4eb0bc
