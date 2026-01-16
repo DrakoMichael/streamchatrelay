@@ -1,55 +1,62 @@
 # Stream Chat Relay - Ajuda
 
 ## Resumo
-Stream Chat Relay é uma ferramenta para gerenciar e organizar chats de mensagens entre multiplas plataformas, você pode modificar para outros tipos de dados.
+Stream Chat Relay é uma ferramenta para gerenciar e retransmitir mensagens de chat em múltiplas plataformas de streaming.
 
-## Básico da aplicação
-1. Clone a aplicação para sua máquina
-2. Instale as dependências usando Node Package Manager: `npm install` -  Será criado uma pasta node_modules contendo todos as bibliotecas de terceiros.
-3. Configure `config.json` em `./src`. Modifique `config_backup.json` em `./src/etc` apenas se você quiser um arquivo de Backup modificado, caso contrário já existem valores padrões.
-4. Inicie a aplicação: `npm start` - mensagens de alertas de inicialização ou conexão durante a execução são configurados no `config.json`. 
-<!-- ?. Configure your API keys in `.env` -->
+## Começando
+1. Clone o repositório
+2. Instale as dependências: `npm install` - Isso irá baixar a pasta node_modules com todas as bibliotecas necessárias
+3. Verifique o `config.json`, não altere o `config_backup.json` em `./etc`, este backup é usado apenas caso o `config.json` não funcione
+4. Execute a aplicação: `npm start`
 
-## Configurando e valores padrões de `config_backup.json`
-A aplicação no momento de sua inicialização irá checar seus parâmetros definidos em `config.json` na pasta `./src`, caso algum valor incorreto (null ou ausente) irá ser chamado uma excessão sem interroper a execução da aplicação utilizando `config_backup.json`, você pode editar previamente esses parâmetros ou deixar os valores padrões. 
-O arquivo de configuração possui a seguinte estrutura com suas respectivas ações:
+## Configuração
+A aplicação utiliza `config.json` para suas configurações. Na inicialização, se algum valor estiver incorreto (null ou ausente), a aplicação usará `config_backup.json` como fallback.
+
+O arquivo de configuração possui a seguinte estrutura:
 
 ```json
-{       // true-false / int
-  "type_ambience": "dev",           //tipo de ambiente (dev/prod) - "prod" por padrão se for diferente de "dev"
-  "use_webserver": true,            //se será iniciado o servidor web (pode consumir processamento)
-  "dev_config": {                   //conf de ambient dev - somente se type_ambience: dev
-    "dev_websocket_port" : 8181,
-    "dev_express_port" : 3131,
-    "enable_spam": true,            //ativa o gerador de mensagens para teste (pode consumir processamento)
-    "connected_chat_notify": true,  //printa no console se algum cliente(navegador) se conectou
-    "print_spam_chats": false       //printa no console TODAS as mensagens geradas pelo gerador
+{
+  "type_ambience": "dev",           // Tipo de ambiente (dev/prod)
+  "use_webserver": true,            // Se o servidor web será iniciado
+  "debbug": true,                   // Modo debug ativado
+  "dev_config": {                   // Configurações do ambiente dev
+    "dev_websocket_port": 8181,
+    "dev_express_port": 3131,
+    "enable_spam": true,            // Ativa gerador de mensagens para teste
+    "connected_chat_notify": true,  // Notifica quando cliente(navegador) se conecta
+    "print_spam_chats": false       // Printa todas as mensagens geradas
   },
-  "data_control":{
-    "storage_messages_enabled": true,   //ativa o módulo de armazenamento de mensagem localmente (log)
-    "max_stored_messages": 200,         //número máximo de mensagens no arquivo
-    "message_cleanup_interval_ms": 5000 //tempo de varredura para exclusão dos arquivos
-  }
-  "data_analysis": {                //conf de análise de dados
-    "enable_data_analysis": false,  //ativa ou desativa o módulo de análise de dados (pode consumir processamento e memória)
-    "data_analysis_interval_ms": 60000  //sera o valor em ms do intervalo em que sera capturado e armazenado dos dados
+  "database": {
+    "enable_database": true,        // Ativa o módulo de banco de dados
+    "enable_in_disk_db": true,      // Ativa armazenamento em disco
+    "enable_in_memory_db": true,    // Ativa banco de dados em memória
+    "indisk_db_name": "streamchatrelay_data"
   },
-  "websocket_port": 8080,           //confs do ambiente padrão - prod -
-  "express_port": 3030
+  "data_control": {
+    "storage_messages_enabled": true,   // Ativa armazenamento de mensagens (log)
+    "max_stored_messages": 200,         // Número máximo de mensagens no arquivo
+    "message_cleanup_interval_ms": 5000 // Intervalo de limpeza dos arquivos
+  },
+  "data_analysis": {
+    "enable_data_analysis": true,       // Ativa análise de dados
+    "data_analysis_interval_ms": 6000   // Intervalo de análise em ms
+  },
+  "websocket_port": 8080,           // Porta do WebSocket (prod)
+  "express_port": 3030              // Porta do servidor Express (prod)
 }
 ```
 
-<!-- ## Usage
+## Uso
 ```bash
-npm start       # Start the relay service
-# npm run test    # Run tests
-# npm run build   # Build for production
-``` -->
-<!-- 
-## Troubleshooting
-- **Connection issues**: Verify API keys and network connectivity
-- **Messages not relaying**: Check the log file for errors
-- **Performance**: Adjust `RELAY_TIMEOUT` if experiencing delays
+npm start       # Inicia o serviço de retransmissão
+# npm run test    # Executa testes
+# npm run build   # Compila para produção
+```
 
-## Support
-For issues, create a GitHub issue or contact the maintainers. -->
+## Solução de Problemas
+- **Problemas de conexão**: Verifique as configurações e conectividade de rede
+- **Mensagens não são retransmitidas**: Verifique o arquivo de log para erros
+- **Desempenho**: Ajuste os intervalos em `data_analysis_interval_ms` ou reduza `max_stored_messages` se experiencing delays
+
+## Suporte
+Para problemas, crie um issue no GitHub ou entre em contato com os mantenedores.
