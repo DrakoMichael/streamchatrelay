@@ -25,6 +25,7 @@ Uma aplicação em tempo real para gerenciar e retransmitir mensagens de chat em
 
 ## 📋 Requisitos
 
+- Desenvolvido em LINUX com Node 20 (use NVM caso necessite)
 - Node.js 16+
 - npm 8+
 
