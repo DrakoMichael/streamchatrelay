@@ -9,6 +9,12 @@
     "connected_chat_notify": true, 
     "print_spam_chats": false
   },
+  "database" : {
+    "enable_database": true,
+    "enable_in_disk_db": true,
+    "enable_in_memory_db": true,
+    "indisk_db_name": "streamchatrelay_data"
+  },
   "data_control": {
     "storage_messages_enabled": true,
     "max_stored_messages": 200,

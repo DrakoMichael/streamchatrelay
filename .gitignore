@@ -1,2 +1,4 @@
 node_modules/
 src/logs/*
+src/.config.json.swp
+src/services/dataBase/*
