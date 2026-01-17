@@ -24,7 +24,7 @@ class main{
     async bootstrap(){
         const settings = await loadSettings(); 
         await bootstrapApp(settings);
-    };   
+    };
 };
 const app = new main()
 ;app.bootstrap();
