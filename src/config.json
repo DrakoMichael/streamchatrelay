@@ -10,7 +10,7 @@
     "print_spam_chats": false
   },
   "database" : {
-    "enable_database": true,
+    "enable_database": false,
     "enable_in_disk_db": true,
     "enable_in_memory_db": true,
     "indisk_db_name": "streamchatrelay_data"
@@ -24,6 +24,7 @@
     "enable_data_analysis": true,
     "data_analysis_interval_ms": 6000
   },
+  "use_websocket": true,
   "websocket_port": 8080,
   "express_port": 3030
 }

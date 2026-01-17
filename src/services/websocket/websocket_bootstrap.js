@@ -9,6 +9,12 @@ export default function websocket_bootstrap(config) {
   }
 
   const wss = websocket_starter(config);
+
+  if (!wss) {
+    console.error("WebSocket starter failed");
+    return null;
+  }
+
   wsFunctionsInstance = new WsFunctions(wss);
 
   return wsFunctionsInstance;

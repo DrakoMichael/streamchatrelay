@@ -1,0 +1,29 @@
+{
+  "type_ambience": "backup",
+  "use_webserver": null,
+  "debbug": null,
+  "dev_config": {
+    "dev_websocket_port" : null,
+    "dev_express_port" : null,
+    "enable_spam": null,
+    "connected_chat_notify": null, 
+    "print_spam_chats": null
+  },
+  "database" : {
+    "enable_database": null,
+    "enable_in_disk_db": null,
+    "enable_in_memory_db": null,
+    "indisk_db_name": null
+  },
+  "data_control": {
+    "storage_messages_enabled": null,
+    "max_stored_messages": null,
+    "message_cleanup_interval_ms": null
+  },
+  "data_analysis": {
+    "enable_data_analysis": null,
+    "data_analysis_interval_ms": null
+  },
+  "websocket_port": null,
+  "express_port": null
+}

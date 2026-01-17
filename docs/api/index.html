@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>Home - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="main.html">main</a></li></ul><h3><a href="global.html">Global</a></h3>
+    
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+
+
+    <section class="package">
+        <h3> </h3>		
+    </section>
+
+
+
+
+
+
+
+
+
+    
+
+
+
+    <section class="readme usertext">
+        <article><h1>Stream Chat Relay</h1>
+<p>Uma aplicação em tempo real para gerenciar e retransmitir mensagens de chat em múltiplas plataformas de streaming. O projeto utiliza WebSocket para comunicação em tempo real, Express.js para a API web e SQLite para armazenamento de dados.</p>
+<h2>🎯 Funcionalidades</h2>
+<ul>
+<li><strong>Comunicação em Tempo Real</strong>: WebSocket para troca instantânea de mensagens entre clientes</li>
+<li><strong>Retransmissão de Mensagens</strong>: Broadcast automático de mensagens para todos os clientes conectados</li>
+<li><strong>Armazenamento de Mensagens</strong>: Log persistente de mensagens com limpeza automática</li>
+<li><strong>Análise de Dados</strong>: Coleta e análise de métricas da aplicação (configurável)</li>
+<li><strong>Banco de Dados Híbrido</strong>: Suporte para SQLite em disco e em memória</li>
+<li><strong>Modo Desenvolvimento</strong>: Gerador de spam de chat para testes automatizados</li>
+<li><strong>Notificações de Conexão</strong>: Feedback de conexão/desconexão de clientes</li>
+<li><strong>Interface Web</strong>: Cliente web para interação com o sistema</li>
+<li><strong>Backup de Configurações</strong>: Fallback automático para configurações padrão</li>
+</ul>
+<h2>🛠️ Tecnologias</h2>
+<ul>
+<li><strong>Node.js</strong> - Runtime JavaScript</li>
+<li><strong>Express.js</strong> - Framework web para HTTP e API REST</li>
+<li><strong>WebSocket (ws)</strong> - Protocolo para comunicação em tempo real</li>
+<li><strong>SQLite3 (better-sqlite3)</strong> - Banco de dados relacional</li>
+<li><strong>Marked</strong> - Parser Markdown para documentação</li>
+</ul>
+<h2>📋 Requisitos</h2>
+<ul>
+<li>Node.js 16+</li>
+<li>npm 8+</li>
+</ul>
+<h2>🚀 Instalação</h2>
+<ol>
+<li>Clone o repositório:</li>
+</ol>
+<pre class="prettyprint source lang-bash"><code>git clone https://github.com/seu-usuario/streamchatrelay.git
+cd streamchatrelay
+</code></pre>
+<ol start="2">
+<li>Instale as dependências:</li>
+</ol>
+<pre class="prettyprint source lang-bash"><code>npm install
+</code></pre>
+<ol start="3">
+<li>Configure o ambiente (opcional):</li>
+</ol>
+<pre class="prettyprint source lang-bash"><code># Edite o arquivo de configuração
+nano src/config.json
+</code></pre>
+<h2>🏃 Como Usar</h2>
+<h3>Modo Desenvolvimento</h3>
+<pre class="prettyprint source lang-bash"><code>npm start
+</code></pre>
+<p>Será iniciado com as seguintes configurações:</p>
+<ul>
+<li>WebSocket na porta <code>8181</code></li>
+<li>Express na porta <code>3131</code></li>
+<li>Gerador de spam de chat <strong>ativado</strong></li>
+<li>Notificações de conexão/desconexão no console</li>
+<li>Análise de dados a cada 6 segundos</li>
+<li>Armazenamento de mensagens (máx. 200 mensagens)</li>
+</ul>
+<h3>Modo Produção</h3>
+<p>Configure o <code>src/config.json</code>:</p>
+<pre class="prettyprint source lang-json"><code>{
+  &quot;type_ambience&quot;: &quot;prod&quot;,
+  &quot;use_webserver&quot;: true,
+  &quot;debbug&quot;: false,
+  &quot;database&quot;: {
+    &quot;enable_database&quot;: true,
+    &quot;enable_in_disk_db&quot;: true,
+    &quot;enable_in_memory_db&quot;: true,
+    &quot;indisk_db_name&quot;: &quot;streamchatrelay_data&quot;
+  },
+  &quot;data_control&quot;: {
+    &quot;storage_messages_enabled&quot;: true,
+    &quot;max_stored_messages&quot;: 200,
+    &quot;message_cleanup_interval_ms&quot;: 5000
+  },
+  &quot;data_analysis&quot;: {
+    &quot;enable_data_analysis&quot;: true,
+    &quot;data_analysis_interval_ms&quot;: 6000
+  },
+  &quot;websocket_port&quot;: 8080,
+  &quot;express_port&quot;: 3030
+}
+</code></pre>
+<h2>📁 Estrutura do Projeto</h2>
+<pre class="prettyprint source"><code>streamchatrelay/
+├── package.json                        # Dependências e scripts
+├── README.md                           # Este arquivo
+├── src/
+│   ├── index.js                        # Arquivo principal de inicialização
+│   ├── config.json                     # Configurações de ambiente
+│   ├── help.md                         # Documentação em inglês
+│   ├── help_BR.md                      # Documentação em português
+│   ├── interface/
+│   │   ├── chat_interface.js          # Interface de chat
+│   │   └── twitch/
+│   │       └── twitch_pool_interface.js # Interface Twitch
+│   ├── logs/
+│   │   └── chat_log.txt               # Arquivo de log de mensagens
+│   ├── public/
+│   │   ├── index.html                 # Interface web do cliente
+│   │   └── scripts.js                 # Script JavaScript do cliente
+│   └── services/
+│       ├── dataBase/
+│       │   ├── sqlite3_bootstrap.js              # Inicialização SQLite em disco
+│       │   ├── sqlite3_bootstrap_memory.js       # Inicialização SQLite em memória
+│       │   └── dataBases/                       # Diretório de bancos de dados
+│       ├── dataControl/
+│       │   └── dataControl.js                   # Gerenciamento de dados e logs
+│       ├── etc/
+│       │   ├── config_backup.json              # Configuração padrão de fallback
+│       │   ├── loadsettings.js                 # Carregador de configurações
+│       │   └── startUtilities.js               # Utilitários de inicialização
+│       ├── externalConnections/
+│       │   ├── connectionHUB.js                # Hub de conexões externas
+│       │   └── twitch/
+│       │       └── connectionWS.js             # Conexão WebSocket Twitch
+│       ├── spamGenerator/
+│       │   ├── fakeMessageData.js              # Gerador de dados fictícios
+│       │   └── liveChatSpam.js                 # Gerador de mensagens de teste
+│       ├── webManager/
+│       │   └── express_bootstrap.js            # Inicialização do Express
+│       └── webSocket/
+│           ├── websocket_bootstrap.js          # Inicialização do WebSocket
+│           ├── websocket_starter.js            # Inicialização do servidor WS
+│           └── ws_functions.js                 # Funções de manipulação WS
+</code></pre>
+<h2>⚙️ Configuração Detalhada</h2>
+<p>O arquivo <code>src/config.json</code> controla todos os comportamentos da aplicação:</p>
+<pre class="prettyprint source lang-json"><code>{
+  &quot;type_ambience&quot;: &quot;dev&quot;,                    // Ambiente: &quot;dev&quot; ou &quot;prod&quot;
+  &quot;use_webserver&quot;: true,                     // Ativar servidor web Express
+  &quot;debbug&quot;: true,                            // Modo debug
+  &quot;dev_config&quot;: {                            // Configurações apenas para &quot;dev&quot;
+    &quot;dev_websocket_port&quot;: 8181,              // Porta WebSocket em desenvolvimento
+    &quot;dev_express_port&quot;: 3131,                // Porta Express em desenvolvimento
+    &quot;enable_spam&quot;: true,                     // Ativar gerador de mensagens de teste
+    &quot;connected_chat_notify&quot;: true,           // Log de conexões/desconexões
+    &quot;print_spam_chats&quot;: false                // Log de todas as mensagens geradas
+  },
+  &quot;database&quot;: {                              // Configurações de banco de dados
+    &quot;enable_database&quot;: true,                 // Ativar SQLite
+    &quot;enable_in_disk_db&quot;: true,               // Armazenar em disco
+    &quot;enable_in_memory_db&quot;: true,             // Usar banco em memória
+    &quot;indisk_db_name&quot;: &quot;streamchatrelay_data&quot; // Nome do banco em disco
+  },
+  &quot;data_control&quot;: {                          // Controle de armazenamento de dados
+    &quot;storage_messages_enabled&quot;: true,        // Ativar log de mensagens
+    &quot;max_stored_messages&quot;: 200,              // Máximo de mensagens armazenadas
+    &quot;message_cleanup_interval_ms&quot;: 5000      // Intervalo de limpeza (ms)
+  },
+  &quot;data_analysis&quot;: {                         // Análise de dados
+    &quot;enable_data_analysis&quot;: true,            // Ativar coleta de métricas
+    &quot;data_analysis_interval_ms&quot;: 6000        // Intervalo de análise (ms)
+  },
+  &quot;websocket_port&quot;: 8080,                    // Porta WebSocket em produção
+  &quot;express_port&quot;: 3030                       // Porta Express em produção
+}
+</code></pre>
+<blockquote>
+<p>⚠️ <strong>Nota</strong>: Se algum valor em <code>config.json</code> estiver inválido ou ausente, a aplicação usará automaticamente <code>src/etc/config_backup.json</code> como fallback.</p>
+</blockquote>
+<h2>📊 Variáveis de Ambiente</h2>
+<p>A aplicação não usa arquivo <code>.env</code>, mas você pode editar <code>src/config.json</code> diretamente para configurar:</p>
+<ul>
+<li>Portas de servidor</li>
+<li>Habilitar/desabilitar recursos</li>
+<li>Intervalos de processamento</li>
+<li>Nomes de banco de dados</li>
+</ul>
+<h2>📖 Documentação Adicional</h2>
+<ul>
+<li><a href="./src/help_BR.md">Guia em Português (help_BR.md)</a></li>
+<li><a href="./src/help.md">Guia em Inglês (help.md)</a></li>
+</ul>
+<h2>🤝 Contribuição</h2>
+<p>Contribuições são bem-vindas! Por favor:</p>
+<ol>
+<li>Faça um Fork do projeto</li>
+<li>Crie uma branch para sua feature (<code>git checkout -b feature/AmazingFeature</code>)</li>
+<li>Commit suas mudanças (<code>git commit -m 'Add some AmazingFeature'</code>)</li>
+<li>Push para a branch (<code>git push origin feature/AmazingFeature</code>)</li>
+<li>Abra um Pull Request</li>
+</ol>
+<h2>📝 Licença</h2>
+<p>Este projeto está licenciado sob a Licença ISC - veja o arquivo LICENSE para detalhes.</p>
+<h2>👤 Autor</h2>
+<p><strong>Michael Mello</strong> - <a href="https://github.com/drakomichael">@drakomichael</a></p>
+<h2>🔗 Links</h2>
+<ul>
+<li><a href="https://github.com/seu-usuario/streamchatrelay">GitHub Repository</a></li>
+<li><a href="./src/help_BR.md">Documentação (PT-BR)</a></li>
+<li><a href="./src/help.md">Documentation (EN)</a></li>
+</ul>
+<hr>
+<p><strong>Última atualização</strong>: Janeiro 16, 2026 | <strong>Versão</strong>: 1.0.0</p></article>
+    </section>
+
+
+
+
+
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        
+            doc.js
+        
+        </h2>
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>STREAMCHATRELAY is an application designed to relay chat messages from Twitch streams in real-time using WebSocket technology. It provides a web interface for users to view and interact with chat messages, making it ideal for streamers and viewers who want to enhance their Twitch experience.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="doc.js.html">doc.js</a>, <a href="doc.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>2025-12-20</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Michael Mello</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>github.com/drakomichael</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+            
+                <div class="description usertext">STREAMCHATRELAY is an application designed to relay chat messages from Twitch streams in real-time using WebSocket technology. It provides a web interface for users to view and interact with chat messages, making it ideal for streamers and viewers who want to enhance their Twitch experience.</div>
+            
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        
+            index.js
+        
+        </h2>
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>streamchatrelay application main bootstrap file</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>1.0.1</li></ul></dd>
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>2025-12-20</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Michael Mello - drakomichael in github</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+            
+                <div class="description usertext">streamchatrelay application main bootstrap file</div>
+            
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        
+            services/app/bootstrapApp.js
+        
+        </h2>
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>This is doc of STREAMCHATRELAY.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_app_bootstrapApp.js.html">services/app/bootstrapApp.js</a>, <a href="services_app_bootstrapApp.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Michael Mello</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://github.com/drakomichael">https://github.com/drakomichael</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+            
+                <div class="description usertext">This is doc of STREAMCHATRELAY.</div>
+            
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Sat Jan 17 2026 03:35:40 GMT-0300 (Horário Padrão de Brasília) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
