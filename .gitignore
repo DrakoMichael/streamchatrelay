@@ -3,3 +3,6 @@ node_modules/
 ./src/.config.json.swp
 ./src/services/dataBase/*
 .env
+*.swp
+*.swo
+*.swn
