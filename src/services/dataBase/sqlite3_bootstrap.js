@@ -1,6 +1,10 @@
 import Database from "better-sqlite3";
 import config from "../../config.json" with { type: "json" };
 
+/**
+ * @module src.services.dataBase.sqlite3_bootstrap
+ */
+
 export default async function sqlite3_bootstrap() {
 
     const db = new Database(`../dataBase/dataBases/${config.database.indisk_db_name}.db`);

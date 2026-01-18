@@ -2,7 +2,8 @@ import sqlite3_bootstrap from "./sqlite3_bootstrap.js";
 import sqlite3_bootstrap_memory from "./sqlite3_bootstrap_memory.js";
 
 /**
- * @deprecated
+ * @module src.services.dataBase.databaseHUB
+ * @deprecated Use individual database modules instead
  * @description Central database hub to initialize all database connections and setups.
  */
 

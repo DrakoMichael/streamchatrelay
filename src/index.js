@@ -1,22 +1,55 @@
-/**  
+/**
  * @file index.js
- * @description streamchatrelay application main bootstrap file
- * @author Michael Mello - drakomichael in github
+ * @description
+ * Arquivo principal de bootstrap da aplicação StreamChatRelay.
+ * Responsável por:
+ *  - Carregar configurações
+ *  - Inicializar serviços essenciais
+ *  - Dar start na aplicação
+ *
+ * @author
+ * Michael Mello (drakomichael)
+ *
  * @since 2025-12-20
  * @version 1.0.1
- **/
+ */
 
-// WebSocket modules import - webSocket server for real time data
-import websocket_bootstrap from "./services/webSocket/websocket_bootstrap.js";
-// Config import
+/**
+ * Imports
+ */
+
+/**
+ * WebSocket bootstrap.
+ * Inicializa o servidor WebSocket para comunicação em tempo real.
+ */
+//import websocket_bootstrap from "./services/webSocket/websocket_bootstrap.js";
+
+/**
+ * Carregador de configurações da aplicação.
+ */
 import loadSettings from "./services/settings/loadsettings.js";
-// bootstrap app import - LOAD MODULES
+
+/**
+ * Bootstrap principal da aplicação.
+ * Responsável por iniciar todos os módulos essenciais.
+ * @module src.index
+ * @description bootstrapApp
+ */
 import bootstrapApp from "./services/app/bootstrapApp.js";
 
 /**
- * @example_args_use
- * if(process.argv && process.argv.includes('--debug')){
- *  console.log("Debug mode enabled");
+ * Exemplos
+ */
+
+/**
+ * Exemplo de uso de argumentos via linha de comando.
+ *
+ * @example
+ * node index.js --debug
+ *
+ * @example
+ * if (process.argv.includes('--debug')) {
+ *   console.log('Debug mode enabled');
  * }
  **/
 
@@ -24,7 +57,7 @@ class main{
     async bootstrap(){
         const settings = await loadSettings(); 
         await bootstrapApp(settings);
-    };
+    };   
 };
 const app = new main()
 ;app.bootstrap();

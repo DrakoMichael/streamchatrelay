@@ -1,6 +1,10 @@
 import config from "../../config.json" with { type: "json" };
 import WebSocket from "ws";
 
+/**
+ * @module src.services.webSocket.ws_functions
+ */
+
 export default class WsFunctions {
   constructor(wss) {
     this.wss = wss;
