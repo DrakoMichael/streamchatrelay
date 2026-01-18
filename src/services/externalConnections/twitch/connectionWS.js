@@ -3,6 +3,10 @@ import connectionHUB from '../connectionHUB.js';
 
 const twitchWebSocketURL = 'wss://eventsub.wss.twitch.tv/ws';
 
+/**
+ * @module src.services.externalConnections.twitch.connectionWS
+ */
+
 export default class TwitchConnectionWS {
     constructor(url = twitchWebSocketURL) {
         this.url = url;

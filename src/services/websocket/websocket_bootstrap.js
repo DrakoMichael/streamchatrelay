@@ -3,6 +3,10 @@ import WsFunctions from "./ws_functions.js";
 
 let wsFunctionsInstance = null;
 
+/**
+ * @module src.services.webSocket.websocket_bootstrap
+ */
+
 export default function websocket_bootstrap(config) {
   if (wsFunctionsInstance) {
     return wsFunctionsInstance;

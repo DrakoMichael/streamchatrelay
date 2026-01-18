@@ -1,5 +1,9 @@
 import Database from "better-sqlite3";
 
+/**
+ * @module src.services.dataBase.sqlite3_bootstrap_memory
+ */
+
 export default async function sqlite3_bootstrap_memory() {
     console.log("SQLite database service initialized.");
 

@@ -1,5 +1,9 @@
 import { WebSocketServer } from "ws";
 
+/**
+ * @module src.services.webSocket.websocket_starter
+ */
+
 export default function websocket_starter(config) {
     try {
         let port = config.websocket_port;

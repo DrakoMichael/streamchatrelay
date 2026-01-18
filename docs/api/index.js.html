@@ -29,7 +29,7 @@
 <nav >
     
     
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="main.html">main</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="src.module_index-Main.html">Main</a></li></ul><h3>Modules</h3><ul><li><a href="src.app.module_bootstrapApp.html">src.app.bootstrapApp</a><ul class='methods'><li data-type='method'><a href="src.app.module_bootstrapApp.html#~bootstrapApp">bootstrapApp</a></li></ul></li><li><a href="src.module_index.html">index</a><ul class='methods'><li data-type='method'><a href="src.module_index.html#~bootstrap">bootstrap</a></li></ul></li><li><a href="src.services.dataBase.module_databaseHUB.html">databaseHUB</a></li><li><a href="src.services.dataBase.module_sqlite3_bootstrap.html">sqlite3_bootstrap</a></li><li><a href="src.services.dataBase.module_sqlite3_bootstrap_memory.html">sqlite3_bootstrap_memory</a></li><li><a href="src.services.etc.module_loadSettings.html">loadSettings</a></li><li><a href="src.services.etc.module_startUtilities.html">startUtilities</a></li><li><a href="src.services.externalConnections.module_connectionHUB.html">connectionHUB</a></li><li><a href="src.services.externalConnections.twitch.module_connectionWS.html">connectionWS</a></li><li><a href="src.services.settings.module_argsManager.html">argsManager</a></li><li><a href="src.services.settings.module_loadsettings.html">loadsettings</a></li><li><a href="src.services.spamGenerator.module_fakeMessageData.html">fakeMessageData</a></li><li><a href="src.services.spamGenerator.module_liveChatSpam.html">liveChatSpam</a></li><li><a href="src.services.webManager.module_express_bootstrap.html">express_bootstrap</a></li><li><a href="src.services.webSocket.module_websocket_bootstrap.html">websocket_bootstrap</a></li><li><a href="src.services.webSocket.module_websocket_starter.html">websocket_starter</a></li><li><a href="src.services.webSocket.module_ws_functions.html">ws_functions</a></li></ul><h3><a href="global.html">Global</a></h3>
     
 </nav>
 
@@ -45,36 +45,109 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**  
+            <pre class="prettyprint source linenums"><code>/**
  * @file index.js
- * @description streamchatrelay application main bootstrap file
- * @author Michael Mello - drakomichael in github
+ * @description
+ * Arquivo principal de bootstrap da aplicação StreamChatRelay.
+ * Responsável por:
+ *  - Carregar configurações
+ *  - Inicializar serviços essenciais
+ *  - Dar start na aplicação
+ *
+ * @author
+ * Michael Mello (drakomichael)
+ *
  * @since 2025-12-20
  * @version 1.0.1
- **/
+ */
 
-// WebSocket modules import - webSocket server for real time data
-import websocket_bootstrap from "./services/webSocket/websocket_bootstrap.js";
-// Config import
+/**
+ * Imports
+ */
+
+/**
+ * WebSocket bootstrap.
+ * Inicializa o servidor WebSocket para comunicação em tempo real.
+ */
+//import websocket_bootstrap from "./services/webSocket/websocket_bootstrap.js";
+
+/**
+ * Carregador de configurações da aplicação.
+ */
 import loadSettings from "./services/settings/loadsettings.js";
-// bootstrap app import - LOAD MODULES
+
+/**
+ * Bootstrap principal da aplicação.
+ * Responsável por iniciar todos os módulos essenciais.
+ * @module src.index
+ * @description bootstrapApp
+ */
 import bootstrapApp from "./services/app/bootstrapApp.js";
 
 /**
- * @example_args_use
- * if(process.argv &amp;&amp; process.argv.includes('--debug')){
- *  console.log("Debug mode enabled");
- * }
- **/
+ * Exemplos
+ */
 
-class main{
-    async bootstrap(){
-        const settings = await loadSettings(); 
-        await bootstrapApp(settings);
-    };   
-};
-const app = new main()
-;app.bootstrap();</code></pre>
+/**
+ * Exemplo de uso de argumentos via linha de comando.
+ *
+ * @example
+ * node index.js --debug
+ *
+ * @example
+ * if (process.argv.includes('--debug')) {
+ *   console.log('Debug mode enabled');
+ * }
+ */
+
+ /**
+  * Classes
+  */
+
+/**
+ * Classe principal da aplicação.
+ * Responsável por orquestrar o processo de bootstrap.
+ *
+ * @class Main
+ */
+class Main {
+  /**
+   * Executa o bootstrap da aplicação.
+   * Fluxo:
+   *  1. Carrega as configurações
+   *  2. Inicializa a aplicação com base nessas configurações
+   *
+   * @async
+   * @method bootstrap
+   * @returns {null} Não retorna nada
+   * @throws {null} Não executa nenhum módulo e não interrompe a aplicação
+   */
+  async bootstrap() {
+    /**
+     * Configurações carregadas do ambiente.
+     * @type {Object}
+     */
+    const settings = loadSettings();
+
+    await bootstrapApp(settings);
+  }
+}
+
+/**
+ * Inicialização
+ */
+
+/**
+ * Instância principal da aplicação.
+ * @type {Main}
+ */
+const app = new Main();
+
+/**
+ * Inicia a aplicação.
+ */
+app.bootstrap();
+</code></pre>
         </article>
     </section>
 
@@ -88,7 +161,7 @@ const app = new main()
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Sat Jan 17 2026 03:35:40 GMT-0300 (Horário Padrão de Brasília) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Sat Jan 17 2026 05:42:19 GMT-0300 (Horário Padrão de Brasília) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

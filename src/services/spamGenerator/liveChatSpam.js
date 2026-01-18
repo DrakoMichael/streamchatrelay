@@ -1,10 +1,11 @@
 import config from "../../config.json" with { type: "json" };
 import websocket_bootstrap from "../webSocket/websocket_bootstrap.js";
-
 import quotes from "./fakeMessageData.js";
-
 import dataControl from "../dataControl/dataControl.js";
 
+/**
+ * @module src.services.spamGenerator.liveChatSpam
+ */
 
 export default function liveChatSpam() {
   if (!config.dev_config.enable_spam) return;

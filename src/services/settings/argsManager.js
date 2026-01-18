@@ -1,4 +1,5 @@
 /**
+ * @module src.services.settings.argsManager
  * @deprecated Create a you own args manager if needed
  */
 
