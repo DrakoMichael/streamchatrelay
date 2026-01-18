@@ -7,6 +7,10 @@ import fs from 'fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename)
 
+/**
+ * @module src.services.webManager.express_bootstrap
+ */
+
 export default async function express_bootstrap(config) {
     try {
         const app = new express()

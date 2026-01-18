@@ -1,3 +1,7 @@
+/**
+ * @module src.services.externalConnections.connectionHUB
+ */
+
 export default class connectionHUB {    
     constructor() {
         this.connections = {};

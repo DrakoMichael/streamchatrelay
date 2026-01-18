@@ -1,3 +1,7 @@
+/**
+ * @module src.services.spamGenerator.fakeMessageData
+ */
+
 export default {
     plataforms: ["Youtube", "Twitch", "Facebook", "TikTok", "Instagram", "Discord", "Reddit", "Twitter", "LinkedIn", "Snapchat"
   ],

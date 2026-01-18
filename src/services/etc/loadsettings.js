@@ -9,6 +9,10 @@ import sqlite3_bootstrap_memory from "../dataBase/sqlite3_bootstrap_memory.js";
 //pick up config from main folder
 import config from "../../config.json" with { type: "json" };
 
+/**
+ * @module src.services.etc.loadSettings
+ */
+
 export default async function loadSettings() {
   if (!config || !config.type_ambience || Object.keys(config).length === 0 ) {
     console.log("Config is missing or invalid. Loading backup configuration.");
