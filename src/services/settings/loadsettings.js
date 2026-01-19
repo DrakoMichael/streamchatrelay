@@ -5,7 +5,7 @@ import config from "../../config.json" with { type: "json" };
  * @module src.services.settings.loadsettings
  */
 
-export default function loadConfig() {
+export default async function loadConfig() {
   if (!config || !config.type_ambience) {
     console.log("Invalid config, using backup.");
     return config_backup;
