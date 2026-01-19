@@ -2,7 +2,7 @@ node_modules/
 ./src/logs/
 ./src/logs/*.log
 ./src/.config.json.swp
-./src/services/dataBase/*
+./src/services/dataBase/dataBase*
 .env
 *.swp
 *.swo
