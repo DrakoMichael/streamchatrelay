@@ -24,6 +24,3 @@ jobs:
 
       - name: Rodar Teste de Lint
         run: npm run test
-
-      - name: Rodar aplicação
-        run: npm run start
