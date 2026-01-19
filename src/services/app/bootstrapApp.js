@@ -11,8 +11,7 @@
  *  - Banco de dados (SQLite em disco ou memória)
  *  - Gerador de spam (modo desenvolvimento)
  *
- * @author
- * Michael Mello
+ * @author Michael Mello
  * @module src.app.bootstrapApp
  * @see https://github.com/drakomichael
  */
@@ -68,8 +67,8 @@ export default async function bootstrapApp(config) {
   }
 
   if (config.debbug) {
-    const twitchWS = new TwitchConnectionWS();
-    twitchWS.connect();
+    const twitchConnection = new TwitchConnectionWS(config);
+    twitchConnection.connect();
   }
 
   if (config.database?.enable_database) {

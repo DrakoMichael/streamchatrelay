@@ -13,8 +13,17 @@ const __dirname = path.dirname(__filename)
 
 export default async function express_bootstrap(config) {
     try {
-        const app = new express()
+        let app;
+
+        try {
+            app = new express()
+        } catch (error) {
+            console.error("Failed to create express app:", error);
+            return null;
+        }
+
         let port = null;
+        
         if(config.type_ambience === "dev") {
             port = config.dev_config.dev_express_port;
         } else {
@@ -27,30 +36,59 @@ export default async function express_bootstrap(config) {
             res.sendFile(path.join(__dirname, '../../public/index.html'));
         })
 
-        app.listen(port, () => {
-            console.log(`Example app listening on port ${port}`)
-        })
-
         app.use((_req, res, next) => {
-        res.setHeader(
-            "Content-Security-Policy",
-            "default-src 'self'; connect-src 'self' ws:;"
-        );
-        next();
+            res.setHeader(
+                "Content-Security-Policy",
+                "default-src 'self'; connect-src 'self' ws:;"
+            );
+            next();
         });
 
         app.get('/help', (req, res) => {
-        const md = fs.readFileSync('../src/help.md', 'utf-8');
-        const html = marked(md);
-        res.send(`<html><body>${html}</body></html>`); });
+            const md = fs.readFileSync('../src/help.md', 'utf-8');
+            const html = marked(md);
+            res.send(`<html><body>${html}</body></html>`);
+        });
 
         app.get('/ajuda', async (_req, res) => {
-        const md = fs.readFileSync('../src/help_BR.md', 'utf-8');
-        const html = marked(md);
-        res.send(`<html lang="pt-BR"><title>Ajuda PT BR</title><body>${html}</body></html>`)});
+            const md = fs.readFileSync('../src/help_BR.md', 'utf-8');
+            const html = marked(md);
+            res.send(`<html lang="pt-BR"><title>Ajuda PT BR</title><body>${html}</body></html>`);
+        });
 
+        // Inicia o servidor e guarda a referência
+        const server = app.listen(port, () => {
+            console.log(`Express app listening on port ${port}`);
+        });
+
+        // Retorna objeto com app e método para fechar
+        return {
+            app,
+            server,
+            close: () => {
+                return new Promise((resolve, reject) => {
+                    // Força o encerramento de todas as conexões
+                    server.closeAllConnections?.();
+                    
+                    // Fecha o servidor
+                    server.close((err) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve();
+                        }
+                    });
+                    
+                    // Timeout de segurança: força encerramento se não fechar em 5s
+                    setTimeout(() => {
+                        resolve();
+                    }, 5000);
+                });
+            }
+        };
 
     } catch (error) {
-        console.log(error);
+        console.error("Express bootstrap error:", error);
+        return null;
     }
 }; 

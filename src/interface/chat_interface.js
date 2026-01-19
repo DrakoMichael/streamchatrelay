@@ -1,4 +1,5 @@
-/**
+/** 
+ * @ignore
  * @typedef {Object} ChatMessage
  * @property {string} id - Unique message identifier
  * @property {string} sender - Username of the message sender
