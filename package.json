@@ -7,7 +7,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "npx eslint",
+    "test": "npx eslint src/**",
     "start": "node ./src/index.js",
     "docs": "npx jsdoc -c jsdoc.json"
   },
