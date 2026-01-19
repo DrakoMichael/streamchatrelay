@@ -10,23 +10,24 @@
  **/ 
 
 export default class ChatMessageInterface {
-    constructor(id, sender, content, timestamp, type = 'text') {
+    constructor(id, sender, content, timestamp, type = 'text', origin = 'unknown') {
         this.id = id;
         this.sender = sender;
         this.content = content;
         this.timestamp = timestamp;
         this.type = type;
         this.isEdited = false;
-        this.origin = 'unknown';
+        this.origin = origin;
     }
 
-    static create(sender, content, type = 'text') {
+    static create(sender, content, type = 'text', origin = 'unknown') {
         return new ChatMessageInterface(
             crypto.randomUUID(),
             sender,
             content,
             Date.now(),
-            type
+            type,
+            origin
         );
     };
 

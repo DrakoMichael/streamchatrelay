@@ -5,15 +5,13 @@ import css from "@eslint/css";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig([
-  // 🔒 Ignorar completamente código gerado / vendor
+  // instrução para ignorar arquivos/pastas
   {
     ignores: [
       "docs/**",
       "package-lock.json"
     ]
   },
-
-  // 🟢 Seu código (Node + Browser moderno)
   {
     files: ["src/**/*.{js,mjs,cjs}"],
     plugins: { js },
@@ -25,8 +23,6 @@ export default defineConfig([
       }
     }
   },
-
-  // 🟡 JSON (exceto lockfile)
   {
     files: ["**/*.json"],
     ignores: ["package-lock.json"],
@@ -34,8 +30,6 @@ export default defineConfig([
     language: "json/json",
     extends: ["json/recommended"]
   },
-
-  // 🟡 CSS do projeto (não docs)
   {
     files: ["src/**/*.css"],
     plugins: { css },
