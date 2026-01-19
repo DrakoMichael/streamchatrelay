@@ -33,7 +33,7 @@ export default class WsFunctions {
     this.sendNewChat(text);
   }
 
-  onClose(ws) {
+  onClose(_ws) {
     if(config.dev_config.connected_chat_notify === true) {
       console.log("Cliente desconectado");
     }

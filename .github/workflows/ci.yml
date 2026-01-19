@@ -22,5 +22,8 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
-      - name: Rodar Teste de Lint (teste)
+      - name: Rodar Teste de Lint
         run: npm run test
+
+      - name: Rodar aplicação
+        run: npm run start
