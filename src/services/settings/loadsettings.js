@@ -1,4 +1,4 @@
-import config_backup from "config_backup.json" with { type: "json" };;
+import config_backup from "./config_backup.json" with { type: "json" };;
 import config from "../../config.json" with { type: "json" };
 
 /**
