@@ -25,19 +25,19 @@ function addChatToLog(params) {
   healthCheck('chat_log');
 }
 
-function addNameToBanFile(params) {
-  const logEntry = `${new Date().toISOString()} - ${params}\n`;
-  fs.appendFileSync('../src/logs/ban_users.txt', logEntry);
-}
+// function addNameToBanFile(params) {
+//   const logEntry = `${new Date().toISOString()} - ${params}\n`;
+//   fs.appendFileSync('../src/logs/ban_users.txt', logEntry);
+// }
 
-function addNameToAdminFile(params) {
-  const logEntry = `${new Date().toISOString()} - ${params}\n`;
-  fs.appendFileSync('../src/logs/admin_users.txt', logEntry);
-}
+// function addNameToAdminFile(params) {
+//   const logEntry = `${new Date().toISOString()} - ${params}\n`;
+//   fs.appendFileSync('../src/logs/admin_users.txt', logEntry);
+// }
 
-function addLineToLog(params) {
-  fs.appendFileSync('../src/logs/data_analyses_log.txt', params);
-}
+// function addLineToLog(params) {
+//   fs.appendFileSync('../src/logs/data_analyses_log.txt', params);
+// }
 
 
 function healthCheck(typeLog) {

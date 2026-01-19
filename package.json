@@ -20,7 +20,12 @@
     "ws": "^8.18.3"
   },
   "devDependencies": {
+    "@eslint/css": "^0.14.1",
+    "@eslint/js": "^9.39.2",
+    "@eslint/json": "^0.14.0",
     "docdash": "^2.0.2",
+    "eslint": "^9.39.2",
+    "globals": "^17.0.0",
     "jsdoc": "^4.0.5"
   }
 }

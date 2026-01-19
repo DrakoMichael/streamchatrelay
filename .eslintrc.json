@@ -1,0 +1,32 @@
+{
+  "root": true,
+  "env": {
+    "node": true,
+    "es2021": true
+  },
+  "extends": ["eslint:recommended"],
+
+  "overrides": [
+    {
+      "files": ["docs/**/*.js"],
+      "env": {
+        "browser": true
+      },
+      "rules": {
+        "no-undef": "off",
+        "no-redeclare": "off",
+        "no-unused-vars": "off",
+        "no-cond-assign": "off",
+        "no-prototype-builtins": "off"
+      }
+    },
+    {
+      "files": ["docs/**/*.css"],
+      "rules": {
+        "css/no-important": "off",
+        "css/use-baseline": "off",
+        "css/no-empty-blocks": "off"
+      }
+    }
+  ]
+}

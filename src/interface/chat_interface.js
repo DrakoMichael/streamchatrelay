@@ -20,14 +20,13 @@ export default class ChatMessageInterface {
         this.origin = 'unknown';
     }
 
-    static create(sender, content, type = 'text', origin = 'unknown') {
+    static create(sender, content, type = 'text') {
         return new ChatMessageInterface(
             crypto.randomUUID(),
             sender,
             content,
             Date.now(),
-            type,
-            origin = 'unknown'
+            type
         );
     };
 
