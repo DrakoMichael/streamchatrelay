@@ -26,4 +26,7 @@ jobs:
         # pode dar erro no commit
       # - name: Rodar Testes geral
       #   run: npm run global_test
+
+      - name: Rodar teste provisório
+        run: npm run test:provisorio
         
