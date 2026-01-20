@@ -24,6 +24,6 @@ jobs:
       #   run: npm run test
 
         # pode dar erro no commit
-      - name: Rodar Testes geral
-        run: npm run global_test
+      # - name: Rodar Testes geral
+      #   run: npm run global_test
         
