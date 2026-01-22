@@ -1,5 +1,7 @@
 import Database from "better-sqlite3";
-import config from "../../config.json" with { type: "json" };
+import loadSettings from "../settings/loadSettings.js";
+
+const config = await loadSettings();
 
 /**
  * @module src.services.dataBase.sqlite3_bootstrap

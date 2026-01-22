@@ -1,5 +1,7 @@
-import config from "../../config.json" with { type: "json" };
+import loadSettings from "../settings/loadSettings.js";
 import WebSocket from "ws";
+
+const config = await loadSettings();
 
 /**
  * @module src.services.webSocket.ws_functions

@@ -1,10 +1,12 @@
-import config from "../../config.json" with { type: "json" };
 import websocket_bootstrap from "../webSocket/websocket_bootstrap.js";
 import quotes from "./fakeMessageData.js";
+import loadSettings from "../settings/loadSettings.js";
 /**
  * @module src.services.spamGenerator.liveChatSpam
  */
 let loopIntervalId = null;
+
+const config = await loadSettings();
 
 /**
  * Inicia o gerador de mensagens aleatórias
