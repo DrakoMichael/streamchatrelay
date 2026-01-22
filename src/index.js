@@ -27,7 +27,7 @@
 /**
  * Carregador de configurações da aplicação.
  */
-import loadSettings from "./services/settings/loadsettings.js";
+import loadSettings from "./services/settings/loadSettings.js";
 
 /**
  * Bootstrap principal da aplicação.

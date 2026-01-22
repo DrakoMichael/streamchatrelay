@@ -7,11 +7,14 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "global_test" : "node ./src/tests/index_test.js",
+    "global_test": "node ./src/tests/index_test.js",
     "test:provisorio": "node ./src/tests/provisorio_test.js",
     "test": "npx eslint",
     "start": "node ./src/index.js",
-    "docs": "npx jsdoc -c jsdoc.json"
+    "docs": "npx jsdoc -c jsdoc.json",
+    "build:js": "esbuild \"src/**/*.js\" --outdir=dist --minify --platform=node --format=esm",
+    "build:assets": "cpy \"**/*.{json,env}\" dist --cwd=src --parents",
+    "build": "npm run build:js && npm run build:assets"
   },
   "dependencies": {
     "better-sqlite3": "^12.6.0",
@@ -25,9 +28,12 @@
     "@eslint/css": "^0.14.1",
     "@eslint/js": "^9.39.2",
     "@eslint/json": "^0.14.0",
+    "cpy": "^11.0.0",
     "docdash": "^2.0.2",
+    "esbuild": "^0.27.2",
     "eslint": "^9.39.2",
     "globals": "^17.0.0",
-    "jsdoc": "^4.0.5"
+    "jsdoc": "^4.0.5",
+    "terser": "^5.46.0"
   }
 }

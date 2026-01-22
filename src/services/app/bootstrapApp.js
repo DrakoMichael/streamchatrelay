@@ -66,10 +66,10 @@ export default async function bootstrapApp(config) {
     await express_bootstrap(config);
   }
 
-  if (config.debbug) {
-    const twitchConnection = new TwitchConnectionWS(config);
-    twitchConnection.connect();
-  }
+  // if (config.debbug) {
+  //   const twitchConnection = new TwitchConnectionWS(config);
+  //   twitchConnection.connect();
+  // }
 
   if (config.database?.enable_database) {
     if (config.database.enable_in_disk_db) {

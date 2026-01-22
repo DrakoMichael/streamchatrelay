@@ -99,9 +99,9 @@ function startSpamLoop(wsFunctions, isTest = false, minMs = 0, maxMs = 500) {
       console.log(formattedMessage);
     }
 
-    if (shouldSaveToDb) {
-      dataControl("addMessage", formattedMessage);
-    }
+    // if (shouldSaveToDb) {
+    //   dataControl("addMessage", formattedMessage);
+    // }
 
     wsFunctions.sendNewChat(formattedMessage);
 

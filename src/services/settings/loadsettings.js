@@ -1,14 +1,14 @@
-import config_backup from "./config_backup.json" with { type: "json" };;
+import backup_config from "./config_backup.js";
 import config from "../../config.json" with { type: "json" };
 
 /**
- * @module src.services.settings.loadsettings
+ * @module src.services.settings.loadSettings
  */
 
-export default async function loadConfig() {
+export default async function loadSettings() {
   if (!config || !config.type_ambience) {
     console.log("Invalid config, using backup.");
-    return config_backup;
+    return backup_config;
   }
   return config;
 }

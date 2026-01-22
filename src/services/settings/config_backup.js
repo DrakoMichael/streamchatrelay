@@ -1,4 +1,4 @@
-{
+export default {
   "type_ambience": "backup",
   "use_webserver": null,
   "debbug": null,
