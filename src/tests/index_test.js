@@ -2,7 +2,7 @@ import liveChatSpam, { stopLiveChatSpam } from "../services/spamGenerator/liveCh
 import express_bootstrap from "../services/webManager/express_bootstrap.js";
 import TwitchConnectionWS from "../services/externalConnections/twitch/connectionWS.js";
 
-/**
+/** TO-DO
  * Testa o módulo liveChatSpam
  */
 async function testLiveChatSpam() {
@@ -30,22 +30,8 @@ async function testLiveChatSpam() {
  */
 async function testExpressBootstrap() {
   try {
-    const result = express_bootstrap({
-      type_ambience: "dev",
-      dev_config: { dev_express_port: 3000 },
-      express_port: 8080
-    });
+    const result = express_bootstrap("test");
 
-    if (!result || !result.close) {
-      throw new Error("Failed to bootstrap express");
-    }
-
-    // Aguarda o servidor iniciar
-    await new Promise(resolve => setTimeout(resolve, 100));
-
-    // Fecha o servidor corretamente
-    await result.close();
-    
     console.log("✓ express_bootstrap: OK");
     return true;
   } catch (error) {

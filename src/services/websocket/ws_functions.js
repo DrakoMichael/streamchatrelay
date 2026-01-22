@@ -11,6 +11,13 @@ export default class WsFunctions {
     this.register();
   }
 
+  /**
+   * to-do 
+   */
+  debug() {
+    return true;
+  }
+
   register() {
     this.wss.on("connection", (ws) => this.onConnection(ws));
   }

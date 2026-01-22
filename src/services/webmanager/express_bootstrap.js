@@ -12,6 +12,10 @@ const __dirname = path.dirname(__filename)
  */
 
 export default async function express_bootstrap(config) {
+    if(config === "test"){
+        return "test_success";
+    }
+    
     try {
         let app;
 

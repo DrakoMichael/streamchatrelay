@@ -1,12 +1,9 @@
 import config from "../../config.json" with { type: "json" };
 import websocket_bootstrap from "../webSocket/websocket_bootstrap.js";
 import quotes from "./fakeMessageData.js";
-import dataControl from "../dataControl/dataControl.js";
-
 /**
  * @module src.services.spamGenerator.liveChatSpam
  */
-
 let loopIntervalId = null;
 
 /**
@@ -33,27 +30,6 @@ export function stopLiveChatSpam() {
     clearTimeout(loopIntervalId);
     loopIntervalId = null;
   }
-}
-
-/**
- * Teste do gerador de spam
- * @returns {object} Mock do wsFunctions para teste
- */
-function testLiveChatSpam() {
-  const messagesGenerated = [];
-  const mockWsFunctions = {
-    sendNewChat: (msg) => {
-      messagesGenerated.push(msg);
-      console.log("✓ Teste:", msg);
-    }
-  };
-
-  startSpamLoop(mockWsFunctions, true, 10, 50);
-
-  return {
-    messages: messagesGenerated,
-    stop: stopLiveChatSpam
-  };
 }
 
 /**
@@ -87,7 +63,7 @@ function formatMessage(messageData) {
  * @param {number} minMs - Tempo mínimo entre mensagens (ms)
  * @param {number} maxMs - Tempo máximo entre mensagens (ms)
  */
-function startSpamLoop(wsFunctions, isTest = false, minMs = 0, maxMs = 500) {
+function startSpamLoop(wsFunctions, minMs = 0, maxMs = 500) {
   const shouldSaveToDb = !isTest && config.data_control.storage_messages_enabled;
   const shouldPrint = config.dev_config.print_spam_chats;
 
@@ -98,6 +74,10 @@ function startSpamLoop(wsFunctions, isTest = false, minMs = 0, maxMs = 500) {
     if (shouldPrint) {
       console.log(formattedMessage);
     }
+
+    /**
+     * to-do
+    **/
 
     // if (shouldSaveToDb) {
     //   dataControl("addMessage", formattedMessage);
@@ -120,4 +100,24 @@ function startSpamLoop(wsFunctions, isTest = false, minMs = 0, maxMs = 500) {
  */
 function generateRandomTime(minMs, maxMs) {
   return Math.floor(Math.random() * (maxMs - minMs + 1)) + minMs;
+}
+
+
+/**
+ * **** TEST/DEBUG ZONE ****
+ * @returns {object} Mock do wsFunctions para teste
+ */
+function testLiveChatSpam() {
+  const messagesGenerated = [];
+
+  async function mockSendNewChat() {
+    setTimeout(() => messagesGenerated.push("teste"), 100)
+  }
+
+  mockSendNewChat();
+  
+  return {
+    messages: messagesGenerated,
+    stop: stopLiveChatSpam
+  };
 }
