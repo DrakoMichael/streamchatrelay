@@ -9,9 +9,9 @@ export default async function loadSettings() {
       assert: { type: "json" }
     });
 
-    const config = configModule.default;
+    const config = configModule; 
 
-    if (!config || !config.type_ambience) {
+    if (!config) {
       console.log("Invalid config, using backup.");
       return backup_config;
     }

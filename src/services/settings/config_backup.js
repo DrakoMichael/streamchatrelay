@@ -1,29 +1,30 @@
 export default {
-  "type_ambience": "backup",
-  "use_webserver": null,
-  "debbug": null,
+  "type_ambience": "dev",
+  "use_webserver": true,
+  "debbug": true,
   "dev_config": {
-    "dev_websocket_port" : null,
-    "dev_express_port" : null,
-    "enable_spam": null,
-    "connected_chat_notify": null, 
-    "print_spam_chats": null
+    "dev_websocket_port" : 8181,
+    "dev_express_port" : 3131,
+    "enable_spam": true,
+    "connected_chat_notify": true, 
+    "print_spam_chats": true
   },
   "database" : {
-    "enable_database": null,
-    "enable_in_disk_db": null,
-    "enable_in_memory_db": null,
-    "indisk_db_name": null
+    "enable_database": false,
+    "enable_in_disk_db": true,
+    "enable_in_memory_db": true,
+    "indisk_db_name": "streamchatrelay_data"
   },
   "data_control": {
-    "storage_messages_enabled": null,
-    "max_stored_messages": null,
-    "message_cleanup_interval_ms": null
+    "storage_messages_enabled": true,
+    "max_stored_messages": 200,
+    "message_cleanup_interval_ms": 5000
   },
   "data_analysis": {
-    "enable_data_analysis": null,
-    "data_analysis_interval_ms": null
+    "enable_data_analysis": true,
+    "data_analysis_interval_ms": 6000
   },
-  "websocket_port": null,
-  "express_port": null
+  "use_websocket": true,
+  "websocket_port": 8080,
+  "express_port": 3030
 }

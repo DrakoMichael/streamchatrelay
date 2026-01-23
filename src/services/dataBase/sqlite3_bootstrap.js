@@ -1,13 +1,11 @@
 import Database from "better-sqlite3";
 import loadSettings from "../settings/loadSettings.js";
 
-const config = await loadSettings();
-
 /**
  * @module src.services.dataBase.sqlite3_bootstrap
  */
 
-export default async function sqlite3_bootstrap() {
+export default async function sqlite3_bootstrap(config) {
 
     const db = new Database(`../dataBase/dataBases/${config.database.indisk_db_name}.db`);
     db.prepare(`

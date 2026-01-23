@@ -6,14 +6,12 @@ import loadSettings from "../settings/loadSettings.js";
  */
 let loopIntervalId = null;
 
-const config = await loadSettings();
-
 /**
  * Inicia o gerador de mensagens aleatórias
  * @param {string|boolean} mode - "test" para modo teste ou boolean para ativar/desativar
  * @returns {void|object} Retorna mock em modo teste
  */
-export default function liveChatSpam(mode) {
+export default function liveChatSpam(config, mode) {
   if (!config.dev_config.enable_spam) return;
 
   if (mode === "test") {
@@ -21,7 +19,7 @@ export default function liveChatSpam(mode) {
   }
 
   const wsFunctions = websocket_bootstrap(config);
-  startSpamLoop(wsFunctions);
+  startSpamLoop(wsFunctions, config);
 }
 
 /**
@@ -65,8 +63,7 @@ function formatMessage(messageData) {
  * @param {number} minMs - Tempo mínimo entre mensagens (ms)
  * @param {number} maxMs - Tempo máximo entre mensagens (ms)
  */
-function startSpamLoop(wsFunctions, minMs = 0, maxMs = 500) {
-  const shouldSaveToDb = !isTest && config.data_control.storage_messages_enabled;
+function startSpamLoop(wsFunctions, config, minMs = 0, maxMs = 500) {
   const shouldPrint = config.dev_config.print_spam_chats;
 
   function loop() {
@@ -76,15 +73,7 @@ function startSpamLoop(wsFunctions, minMs = 0, maxMs = 500) {
     if (shouldPrint) {
       console.log(formattedMessage);
     }
-
-    /**
-     * to-do
-    **/
-
-    // if (shouldSaveToDb) {
-    //   dataControl("addMessage", formattedMessage);
-    // }
-
+    
     wsFunctions.sendNewChat(formattedMessage);
 
     const nextTime = generateRandomTime(minMs, maxMs);
