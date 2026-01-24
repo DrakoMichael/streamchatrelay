@@ -18,7 +18,7 @@ export default function liveChatSpam(config, mode) {
     return testLiveChatSpam();
   }
 
-  const wsFunctions = websocket_bootstrap(config);
+  const wsFunctions = websocket_bootstrap.getInstance();
   startSpamLoop(wsFunctions, config);
 }
 
@@ -74,7 +74,7 @@ function startSpamLoop(wsFunctions, config, minMs = 0, maxMs = 500) {
       console.log(formattedMessage);
     }
     
-    wsFunctions.sendNewChat(formattedMessage);
+    // wsFunctions.sendNewChat(formattedMessage);
 
     const nextTime = generateRandomTime(minMs, maxMs);
     loopIntervalId = setTimeout(loop, nextTime);

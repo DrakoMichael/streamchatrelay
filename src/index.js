@@ -38,8 +38,19 @@ import bootstrapApp from "./services/app/bootstrapApp.js";
 
 class main{
     async bootstrap(){
-        const settings = await loadSettings(); 
-        await bootstrapApp(settings);
+        try {
+            console.log('Carregando configurações...\n');
+            const settings = await loadSettings();
+            
+            await bootstrapApp.ignite(settings);
+            
+            console.log('Aplicação iniciada com sucesso! ✓');
+        } catch (error) {
+            console.error('\n❌ ERRO FATAL: A aplicação não pôde ser iniciada');
+            console.error('Motivo:', error.message);
+            console.error('\nStack trace:', error.stack);
+            process.exit(1);
+        }
     };   
 };
 const app = new main()
