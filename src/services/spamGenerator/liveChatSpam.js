@@ -1,12 +1,9 @@
-import config from "../../config.json" with { type: "json" };
 import websocket_bootstrap from "../webSocket/websocket_bootstrap.js";
 import quotes from "./fakeMessageData.js";
-import dataControl from "../dataControl/dataControl.js";
 
 /**
  * @module src.services.spamGenerator.liveChatSpam
  */
-
 let loopIntervalId = null;
 
 /**
@@ -14,15 +11,15 @@ let loopIntervalId = null;
  * @param {string|boolean} mode - "test" para modo teste ou boolean para ativar/desativar
  * @returns {void|object} Retorna mock em modo teste
  */
-export default function liveChatSpam(mode) {
+export default function liveChatSpam(config, mode) {
   if (!config.dev_config.enable_spam) return;
 
   if (mode === "test") {
     return testLiveChatSpam();
   }
 
-  const wsFunctions = websocket_bootstrap(config);
-  startSpamLoop(wsFunctions);
+  const wsFunctions = websocket_bootstrap.getInstance();
+  startSpamLoop(wsFunctions, config);
 }
 
 /**
@@ -33,27 +30,6 @@ export function stopLiveChatSpam() {
     clearTimeout(loopIntervalId);
     loopIntervalId = null;
   }
-}
-
-/**
- * Teste do gerador de spam
- * @returns {object} Mock do wsFunctions para teste
- */
-function testLiveChatSpam() {
-  const messagesGenerated = [];
-  const mockWsFunctions = {
-    sendNewChat: (msg) => {
-      messagesGenerated.push(msg);
-      console.log("✓ Teste:", msg);
-    }
-  };
-
-  startSpamLoop(mockWsFunctions, true, 10, 50);
-
-  return {
-    messages: messagesGenerated,
-    stop: stopLiveChatSpam
-  };
 }
 
 /**
@@ -87,8 +63,7 @@ function formatMessage(messageData) {
  * @param {number} minMs - Tempo mínimo entre mensagens (ms)
  * @param {number} maxMs - Tempo máximo entre mensagens (ms)
  */
-function startSpamLoop(wsFunctions, isTest = false, minMs = 0, maxMs = 500) {
-  const shouldSaveToDb = !isTest && config.data_control.storage_messages_enabled;
+function startSpamLoop(wsFunctions, config, minMs = 0, maxMs = 500) {
   const shouldPrint = config.dev_config.print_spam_chats;
 
   function loop() {
@@ -98,12 +73,8 @@ function startSpamLoop(wsFunctions, isTest = false, minMs = 0, maxMs = 500) {
     if (shouldPrint) {
       console.log(formattedMessage);
     }
-
-    if (shouldSaveToDb) {
-      dataControl("addMessage", formattedMessage);
-    }
-
-    wsFunctions.sendNewChat(formattedMessage);
+    
+    // wsFunctions.sendNewChat(formattedMessage);
 
     const nextTime = generateRandomTime(minMs, maxMs);
     loopIntervalId = setTimeout(loop, nextTime);
@@ -120,4 +91,24 @@ function startSpamLoop(wsFunctions, isTest = false, minMs = 0, maxMs = 500) {
  */
 function generateRandomTime(minMs, maxMs) {
   return Math.floor(Math.random() * (maxMs - minMs + 1)) + minMs;
+}
+
+
+/**
+ * **** TEST/DEBUG ZONE ****
+ * @returns {object} Mock do wsFunctions para teste
+ */
+function testLiveChatSpam() {
+  const messagesGenerated = [];
+
+  async function mockSendNewChat() {
+    setTimeout(() => messagesGenerated.push("teste"), 100)
+  }
+
+  mockSendNewChat();
+  
+  return {
+    messages: messagesGenerated,
+    stop: stopLiveChatSpam
+  };
 }

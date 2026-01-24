@@ -1,14 +1,26 @@
-import config_backup from "./config_backup.json" with { type: "json" };;
-import config from "../../config.json" with { type: "json" };
+import backup_config from "./config_backup.js";
+import logManager from "../app/logManager.js";
 
 /**
- * @module src.services.settings.loadsettings
+ * @author Michael Mello
+ * @module src.services.settings.loadSettings
+ * @description 
+ * load the configuration file (config.json) or use backup if not found
  */
-
-export default async function loadConfig() {
-  if (!config || !config.type_ambience) {
-    console.log("Invalid config, using backup.");
-    return config_backup;
+export default async function loadSettings() {
+  try {
+    const configModule = await pickJsonConfig();
+    return configModule.default;
+  } catch (error) {
+    logManager.warn("Config file not found, using backup.");
+    logManager.error(error)
+    return backup_config;
   }
-  return config;
+}
+
+async function pickJsonConfig() {
+  const jsonPath = await import("../../config.json", {
+      with: { type: "json" }
+    });
+  return jsonPath;
 }

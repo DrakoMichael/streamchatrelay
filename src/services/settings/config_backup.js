@@ -1,13 +1,13 @@
-{
+export default {
   "type_ambience": "dev",
   "use_webserver": true,
   "debbug": true,
   "dev_config": {
     "dev_websocket_port" : 8181,
-    "dev_express_port" : 3232,
+    "dev_express_port" : 3131,
     "enable_spam": true,
     "connected_chat_notify": true, 
-    "print_spam_chats": false
+    "print_spam_chats": true
   },
   "database" : {
     "enable_database": false,
