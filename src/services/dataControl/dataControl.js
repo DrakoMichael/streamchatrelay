@@ -18,13 +18,6 @@ export default function dataControl(param,data) {
   };
 }
 
-function addChatToLog(params) {
-  if (!config.data_control.storage_messages_enabled) return;
-  const logEntry = `${new Date().toISOString()} - ${params}\n`;
-  fs.appendFileSync('../src/logs/chat_log.txt', logEntry);
-  healthCheck('chat_log');
-}
-
 // function addNameToBanFile(params) {
 //   const logEntry = `${new Date().toISOString()} - ${params}\n`;
 //   fs.appendFileSync('../src/logs/ban_users.txt', logEntry);

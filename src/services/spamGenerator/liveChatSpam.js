@@ -1,6 +1,6 @@
 import websocket_bootstrap from "../webSocket/websocket_bootstrap.js";
 import quotes from "./fakeMessageData.js";
-import loadSettings from "../settings/loadSettings.js";
+
 /**
  * @module src.services.spamGenerator.liveChatSpam
  */
