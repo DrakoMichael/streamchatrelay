@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "global_test": "node ./src/tests/index_test.js",
-    "test:provisorio": "node ./src/index.js",
+    "test:provisorio": "node ./src/bypass.js",
     "test": "npx eslint",
     "start": "node ./src/index.js",
     "docs": "npx jsdoc -c jsdoc.json",

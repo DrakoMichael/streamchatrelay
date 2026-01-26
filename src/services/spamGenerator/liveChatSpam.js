@@ -2,15 +2,12 @@ import websocket_bootstrap from "../webSocket/websocket_bootstrap.js";
 import quotes from "./fakeMessageData.js";
 
 /**
+ * @author xXx_misterious_computor_guy_xXx (i don't want to take credit for this shi)
  * @module src.services.spamGenerator.liveChatSpam
  */
+
 let loopIntervalId = null;
 
-/**
- * Inicia o gerador de mensagens aleatórias
- * @param {string|boolean} mode - "test" para modo teste ou boolean para ativar/desativar
- * @returns {void|object} Retorna mock em modo teste
- */
 export default function liveChatSpam(config, mode) {
   if (!config.dev_config.enable_spam) return;
 
@@ -22,9 +19,6 @@ export default function liveChatSpam(config, mode) {
   startSpamLoop(wsFunctions, config);
 }
 
-/**
- * Para o gerador de spam
- */
 export function stopLiveChatSpam() {
   if (loopIntervalId) {
     clearTimeout(loopIntervalId);
@@ -32,10 +26,6 @@ export function stopLiveChatSpam() {
   }
 }
 
-/**
- * Gera uma mensagem aleatória
- * @returns {object} Objeto com plataforma, usuario e mensagem
- */
 function generateRandomMessage() {
   const indice = Math.floor(Math.random() * quotes.nome.length);
 
@@ -46,23 +36,12 @@ function generateRandomMessage() {
   };
 }
 
-/**
- * Formata uma mensagem para envio
- * @param {object} messageData - Dados da mensagem
- * @returns {string} Mensagem formatada
- */
+
 function formatMessage(messageData) {
   const { plataforma, usuario, mensagem } = messageData;
   return `[${plataforma}] ${usuario}: ${mensagem}`;
 }
 
-/**
- * Inicia o loop de envio de mensagens
- * @param {object} wsFunctions - Instância WebSocket
- * @param {boolean} isTest - Indica se é modo teste
- * @param {number} minMs - Tempo mínimo entre mensagens (ms)
- * @param {number} maxMs - Tempo máximo entre mensagens (ms)
- */
 function startSpamLoop(wsFunctions, config, minMs = 0, maxMs = 500) {
   const shouldPrint = config.dev_config.print_spam_chats;
 
@@ -83,21 +62,11 @@ function startSpamLoop(wsFunctions, config, minMs = 0, maxMs = 500) {
   loop();
 }
 
-/**
- * Gera um tempo aleatório entre min e max
- * @param {number} minMs - Mínimo em milissegundos
- * @param {number} maxMs - Máximo em milissegundos
- * @returns {number} Tempo aleatório
- */
 function generateRandomTime(minMs, maxMs) {
   return Math.floor(Math.random() * (maxMs - minMs + 1)) + minMs;
 }
 
 
-/**
- * **** TEST/DEBUG ZONE ****
- * @returns {object} Mock do wsFunctions para teste
- */
 function testLiveChatSpam() {
   const messagesGenerated = [];
 

@@ -7,7 +7,7 @@ import logManager from "../app/logManager.js";
  * @description 
  * load the configuration file (config.json) or use backup if not found
  */
-export default async function loadSettings() {
+async function loadSettings() {
   try {
     const configModule = await pickJsonConfig();
     return configModule.default;
@@ -24,3 +24,5 @@ async function pickJsonConfig() {
     });
   return jsonPath;
 }
+
+export default loadSettings;
