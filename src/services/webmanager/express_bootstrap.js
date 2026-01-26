@@ -70,9 +70,9 @@ export default async function express_bootstrap(config) {
         });
 
         // API endpoint to get config
-        app.get('/api/config', (_req, res) => {
+        app.get('/api/config', async (_req, res) => {
             try {
-                const configData = fs.readFileSync(CONFIG_PATH, 'utf-8');
+                const configData = await fs.promises.readFile(CONFIG_PATH, 'utf-8');
                 const config = JSON.parse(configData);
                 res.json(config);
             } catch (error) {
@@ -81,7 +81,7 @@ export default async function express_bootstrap(config) {
         });
 
         // API endpoint to save config
-        app.post('/api/config', (req, res) => {
+        app.post('/api/config', async (req, res) => {
             try {
                 const newConfig = req.body;
                 
@@ -90,8 +90,21 @@ export default async function express_bootstrap(config) {
                     return res.status(400).json({ error: 'Configuração inválida' });
                 }
 
+                // Validate required fields
+                const requiredFields = ['type_ambience', 'use_webserver', 'use_websocket'];
+                for (const field of requiredFields) {
+                    if (!(field in newConfig)) {
+                        return res.status(400).json({ error: `Campo obrigatório ausente: ${field}` });
+                    }
+                }
+
+                // Validate nested structures
+                if (newConfig.type_ambience === 'dev' && !newConfig.dev_config) {
+                    return res.status(400).json({ error: 'dev_config é obrigatório no modo de desenvolvimento' });
+                }
+
                 // Write config to file with pretty formatting
-                fs.writeFileSync(CONFIG_PATH, JSON.stringify(newConfig, null, 2), 'utf-8');
+                await fs.promises.writeFile(CONFIG_PATH, JSON.stringify(newConfig, null, 2), 'utf-8');
                 
                 res.json({ success: true, message: 'Configurações salvas com sucesso' });
             } catch (error) {
