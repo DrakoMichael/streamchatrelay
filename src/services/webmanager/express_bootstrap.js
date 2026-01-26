@@ -213,7 +213,7 @@ export default async function express_bootstrap(config) {
                 
                 if (!tokenResponse.ok) {
                     const errorData = await tokenResponse.text();
-                    throw new Error(`Token exchange failed: ${errorData}`);
+                    throw new Error(`Token exchange failed (${tokenResponse.status}): ${errorData}`);
                 }
                 
                 const tokenData = await tokenResponse.json();
@@ -280,11 +280,11 @@ export default async function express_bootstrap(config) {
                             
                             <h3>Informações do Token:</h3>
                             <ul>
-                                <li><strong>Access Token:</strong> ${tokenData.access_token.substring(0, 20)}...</li>
+                                <li><strong>Access Token:</strong> Salvo com sucesso</li>
                                 <li><strong>Token Type:</strong> ${tokenData.token_type}</li>
                                 <li><strong>Expires In:</strong> ${tokenData.expires_in} segundos</li>
                                 ${tokenData.refresh_token ? `<li><strong>Refresh Token:</strong> Salvo</li>` : ''}
-                                <li><strong>Scopes:</strong> ${tokenData.scope ? tokenData.scope.join(', ') : 'N/A'}</li>
+                                <li><strong>Scopes:</strong> ${tokenData.scope || 'N/A'}</li>
                             </ul>
                             
                             <p><a href="/">← Voltar para página inicial</a></p>
