@@ -1,0 +1,10 @@
+[2026-01-26 01:21:43.770] [INFO] 
+[BOOTSTRAP] Starting StreamChatRelay application...
+[2026-01-26 01:21:43.777] [INFO] [BOOTSTRAP] SUCCESS STARTER 
+ Activated modules: WebSocket Server, Express Web Server, Debug Connection, Spam Generator
+
+[2026-01-26 01:22:20.685] [INFO] 
+[BOOTSTRAP] Starting StreamChatRelay application...
+[2026-01-26 01:22:20.692] [INFO] [BOOTSTRAP] SUCCESS STARTER 
+ Activated modules: WebSocket Server, Express Web Server, Debug Connection, Spam Generator
+

@@ -42,7 +42,7 @@ export default async function express_bootstrap(config) {
         app.use((_req, res, next) => {
             res.setHeader(
                 "Content-Security-Policy",
-                "default-src 'self'; connect-src 'self' ws:; script-src 'self' 'unsafe-inline';"
+                "default-src 'self'; connect-src 'self' ws:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
             );
             next();
         });
