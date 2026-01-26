@@ -157,9 +157,9 @@ export default class TwitchConnectionWS {
     /**
      * Handles keepalive messages to maintain connection
      * 
-     * @param {Object} message - Keepalive message
+     * @param {Object} _message - Keepalive message (unused)
      */
-    handleKeepalive(message) {
+    handleKeepalive(_message) {
         console.log('[Twitch WS] Keepalive received');
         
         // Reset the keepalive timeout using the same timeout value
