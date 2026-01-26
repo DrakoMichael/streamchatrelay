@@ -10,4 +10,4 @@ node_modules/
 minify.js
 dist/
 jsconfig.json
-README.md
+*.backup

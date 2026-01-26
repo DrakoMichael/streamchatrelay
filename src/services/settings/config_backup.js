@@ -9,6 +9,11 @@ export default {
     "connected_chat_notify": true, 
     "print_spam_chats": true
   },
+  "twitch": {
+    "client_id": "",
+    "access_token": "",
+    "enable_twitch_connection": false
+  },
   "database" : {
     "enable_database": false,
     "enable_in_disk_db": true,

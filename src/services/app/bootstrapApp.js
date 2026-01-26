@@ -18,10 +18,10 @@
 
 /** @Imports **/
 import liveChatSpam from "../spamGenerator/liveChatSpam.js";
-import express_bootstrap from "../webManager/express_bootstrap.js";
+import express_bootstrap from "../webmanager/express_bootstrap.js";
 import sqlite3_bootstrap from "../dataBase/sqlite3_bootstrap.js";
 import sqlite3_bootstrap_memory from "../dataBase/sqlite3_bootstrap_memory.js";
-import websocket_bootstrap from "../webSocket/websocket_bootstrap.js";
+import websocket_bootstrap from "../websocket/websocket_bootstrap.js";
 import debugBootstrap from "./debugBootstrap.js";
 import logManager from "./logManager.js";
 

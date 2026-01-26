@@ -1,4 +1,4 @@
-import websocket_bootstrap from "../webSocket/websocket_bootstrap.js";
+import websocket_bootstrap from "../websocket/websocket_bootstrap.js";
 import quotes from "./fakeMessageData.js";
 
 /**
