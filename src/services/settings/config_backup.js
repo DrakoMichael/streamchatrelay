@@ -11,7 +11,9 @@ export default {
   },
   "twitch": {
     "client_id": "",
+    "client_secret": "",
     "access_token": "",
+    "refresh_token": "",
     "enable_twitch_connection": false
   },
   "database" : {

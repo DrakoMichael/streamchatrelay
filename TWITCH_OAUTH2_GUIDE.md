@@ -17,17 +17,55 @@ Este guia explica como configurar e usar a integração OAuth2 com o WebSocket E
    - **Category**: Chat Bot ou Application Integration
 5. Clique em "Create"
 
-### Passo 2: Obter Client ID e Token
+### Passo 2: Obter Client ID e Client Secret
 
 1. Na página da sua aplicação, copie o **Client ID**
-2. Clique em "Manage" e depois em "New Secret" para gerar um Client Secret (guarde em local seguro)
-3. Para gerar um Access Token, você pode usar:
-   - [Twitch Token Generator](https://twitchtokengenerator.com/) (recomendado para testes)
-   - Ou implementar o fluxo OAuth2 completo
+2. Clique em "Manage" e depois em "New Secret" para gerar um **Client Secret** (guarde em local seguro)
+3. Configure as credenciais no arquivo `src/config.json`:
+   ```json
+   {
+     "twitch": {
+       "client_id": "seu_client_id_aqui",
+       "client_secret": "seu_client_secret_aqui",
+       "enable_twitch_connection": false
+     }
+   }
+   ```
+
+### Passo 3: Autenticar via OAuth2 (Recomendado)
+
+**NOVO!** Agora você pode obter seus tokens automaticamente usando o fluxo OAuth2:
+
+1. Inicie a aplicação:
+   ```bash
+   npm start
+   ```
+
+2. Acesse no navegador:
+   ```
+   http://localhost:3232/auth/twitch
+   ```
+   (Ajuste a porta conforme seu `dev_express_port` em `config.json`)
+
+3. Você será redirecionado para a página de autorização da Twitch
+
+4. Clique em "Autorizar" para permitir que a aplicação acesse sua conta
+
+5. Após a autorização, você será redirecionado de volta e os tokens serão salvos automaticamente no `config.json`
+
+6. Para ativar a conexão, altere `enable_twitch_connection: true` no `config.json` e reinicie a aplicação
+
+### Passo 3 (Alternativa): Gerar Token Manualmente
+
+Se preferir gerar o token manualmente:
+
+1. Use o [Twitch Token Generator](https://twitchtokengenerator.com/) (recomendado para testes rápidos)
+2. Ou use a ferramenta CLI da Twitch
+3. Cole o token gerado no campo `access_token` do `config.json`
 
 ## ⚙️ Configuração
 
-### Opção 1: Configuração via config.json (Recomendado para Desenvolvimento)
+### Configuração via config.json
 
 Edite o arquivo `src/config.json`:
 
@@ -37,26 +75,18 @@ Edite o arquivo `src/config.json`:
   "debbug": true,
   "twitch": {
     "client_id": "seu_client_id_aqui",
-    "access_token": "seu_access_token_aqui",
+    "client_secret": "seu_client_secret_aqui",
+    "access_token": "obtido_via_oauth_ou_manual",
+    "refresh_token": "obtido_via_oauth",
     "enable_twitch_connection": true
   }
 }
 ```
 
-### Opção 2: Usando Variáveis de Ambiente (Recomendado para Produção)
-
-1. Copie o arquivo `.env.example`:
-```bash
-cp .env.example .env
-```
-
-2. Edite o `.env` com suas credenciais:
-```env
-TWITCH_CLIENT_ID=seu_client_id_aqui
-TWITCH_ACCESS_TOKEN=seu_access_token_aqui
-```
-
-3. Atualize seu código para carregar as variáveis de ambiente (futuro)
+**Importante**: 
+- O `client_secret` é necessário apenas para o fluxo OAuth2 automático
+- Se você gerar o token manualmente, pode deixar o `client_secret` vazio
+- Os tokens `access_token` e `refresh_token` serão preenchidos automaticamente se você usar `/auth/twitch`
 
 ## 🚀 Usando a Conexão Twitch
 
@@ -90,7 +120,15 @@ A implementação atual suporta os seguintes tipos de mensagem do Twitch EventSu
 
 ## 🔧 Funcionalidades Implementadas
 
-### OAuth2 Handshake
+### OAuth2 Flow Completo
+- ✅ Endpoint de inicialização OAuth2 (`/auth/twitch`)
+- ✅ Endpoint de callback OAuth2 (`/auth/callback`)
+- ✅ Troca automática de código por access token
+- ✅ Salvamento automático de tokens no config.json
+- ✅ Suporte para refresh tokens
+- ✅ Interface web para autorização
+
+### OAuth2 Handshake WebSocket EventSub
 - ✅ Conexão WebSocket com EventSub da Twitch
 - ✅ Autenticação automática com client_id e access_token
 - ✅ Recebimento e processamento de Session ID
@@ -101,7 +139,23 @@ A implementação atual suporta os seguintes tipos de mensagem do Twitch EventSu
 ### Fluxo de Conexão
 
 ```
-1. Aplicação inicia com debug=true
+Opção 1: Fluxo OAuth2 Completo (Recomendado)
+1. Usuário acessa /auth/twitch
+2. Aplicação redireciona para página de autorização da Twitch
+3. Usuário autoriza a aplicação
+4. Twitch redireciona para /auth/callback com código de autorização
+5. Aplicação troca código por access_token e refresh_token
+6. Tokens são salvos automaticamente no config.json
+7. Usuário ativa enable_twitch_connection no config.json
+8. Aplicação reiniciada
+
+Opção 2: Token Manual
+1. Usuário gera token manualmente
+2. Cola no config.json
+3. Ativa enable_twitch_connection
+
+Após obter o token (qualquer opção):
+1. Aplicação inicia com debug=true e enable_twitch_connection=true
 2. TwitchConnectionWS é instanciado com credenciais
 3. WebSocket conecta a wss://eventsub.wss.twitch.tv/ws
 4. Twitch envia session_welcome com Session ID
@@ -171,8 +225,11 @@ Os logs mostram o status da conexão:
 
 ## 🔄 Próximas Melhorias
 
+- [x] Implementar fluxo OAuth2 completo com endpoints de callback
+- [x] Adicionar suporte para obtenção automática de tokens
+- [ ] Implementar refresh token automático quando access_token expirar
 - [ ] Implementar criação de subscrições EventSub via API
-- [ ] Adicionar suporte para refresh token automático
 - [ ] Implementar handlers específicos para diferentes tipos de eventos
 - [ ] Adicionar persistência de Session ID
 - [ ] Interface web para gerenciar subscrições
+- [ ] Adicionar validação de token antes de conectar
