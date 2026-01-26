@@ -1,8 +1,8 @@
 {
   "type_ambience": "dev",
   "use_webserver": true,
-  "debbug": true,
-  "dev_config": {
+  "debbug": false,
+  "dev_config": { 
     "dev_websocket_port": 8181,
     "dev_express_port": 3232,
     "enable_spam": true,
@@ -14,7 +14,7 @@
     "client_secret": "",
     "access_token": "",
     "refresh_token": "",
-    "enable_twitch_connection": false
+    "enable_twitch_connection": true
   },
   "database": {
     "enable_database": false,

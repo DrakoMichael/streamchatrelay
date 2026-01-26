@@ -28,20 +28,21 @@ class websocket_bootstrap {
 
   static init(config) {
     if (wsFunctionsInstance) {
-      console.log("WebSocket já inicializado, retornando instância existente");
+      console.log("[WEBSOCKET] WebSocket já inicializado, retornando instância existente");
       return wsFunctionsInstance;
     }
 
     try {
+      console.log("[WEBSOCKET] Iniciando WebSocket server...");
       const wss = websocket_starter(config);
 
       //WsFunctions IS INJECTED HERE VVVV
       wsFunctionsInstance = new WsFunctions(wss, config);
       
-      console.log("WebSocket inicializado com sucesso");
+      console.log("[WEBSOCKET] ✓ WebSocket inicializado com sucesso");
       return wsFunctionsInstance;
     } catch (error) {
-      console.error("Falha ao inicializar WebSocket:", error);
+      console.error("[WEBSOCKET] ✗ Falha ao inicializar WebSocket:", error);
       return null;
     }
   }

@@ -32,11 +32,17 @@ export default class WsFunctions {
   }
 
   broadcast(payload) {
+    let sentCount = 0;
     this.wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(payload);
+        sentCount++;
       }
     });
+    
+    if (this.config.dev_config?.print_spam_chats) {
+      console.log(`[WEBSOCKET] Broadcast sent to ${sentCount} client(s)`);
+    }
   }
 
   run(type, payload) {

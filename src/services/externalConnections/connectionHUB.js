@@ -2,6 +2,8 @@
  * @module src.services.externalConnections.connectionHUB
  */
 
+import logManager from "../app/logManager.js";
+
 export default class connectionHUB {    
     constructor() {
         this.connections = {};
@@ -24,7 +26,7 @@ export default class connectionHUB {
                 this.handleTwitchConnection(data);
                 break;
             default:
-                console.log(`[ConnectionHUB] Unknown service: ${params}`);
+                logManager.error(`[ConnectionHUB] Unknown service: ${params}`);
         }
     }
 
@@ -38,35 +40,35 @@ export default class connectionHUB {
 
         switch (status) {
             case 'connected':
-                console.log('[ConnectionHUB] ✓ Twitch WebSocket connected');
+                logManager.info('[ConnectionHUB] ✓ Twitch WebSocket connected');
                 break;
             
             case 'authenticated':
-                console.log(`[ConnectionHUB] ✓ Twitch OAuth2 authenticated - Session: ${sessionId}`);
-                if (message) console.log(`[ConnectionHUB] ${message}`);
+                logManager.info(`[ConnectionHUB] ✓ Twitch OAuth2 authenticated - Session: ${sessionId}`);
+                if (message) logManager.info(`[ConnectionHUB] ${message}`);
                 break;
             
             case 'notification':
-                console.log(`[ConnectionHUB] → Twitch notification: ${subscriptionType}`);
+                logManager.info(`[ConnectionHUB] → Twitch notification: ${subscriptionType}`);
                 if (event) {
-                    console.log('[ConnectionHUB] Event data:', JSON.stringify(event, null, 2));
+                    logManager.info(`[ConnectionHUB] Event data: ${JSON.stringify(event, null, 2)}`);
                 }
                 break;
             
             case 'revocation':
-                console.log(`[ConnectionHUB] ⚠ Twitch subscription revoked: ${subscriptionType}`);
+                logManager.warn(`[ConnectionHUB] ⚠ Twitch subscription revoked: ${subscriptionType}`);
                 break;
             
             case 'error':
-                console.error(`[ConnectionHUB] ✗ Twitch error: ${message || 'Unknown error'}`);
+                logManager.error(`[ConnectionHUB] ✗ Twitch error: ${message || 'Unknown error'}`);
                 break;
             
             case 'disconnected':
-                console.log(`[ConnectionHUB] ✗ Twitch disconnected: ${message || 'Connection closed'}`);
+                logManager.warn(`[ConnectionHUB] ✗ Twitch disconnected: ${message || 'Connection closed'}`);
                 break;
             
             default:
-                console.log(`[ConnectionHUB] Twitch connection: ${status}`, data);
+                logManager.info(`[ConnectionHUB] Twitch connection: ${status}`, data);
         }
     }
 };

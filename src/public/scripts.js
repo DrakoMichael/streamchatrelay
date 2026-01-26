@@ -1,4 +1,4 @@
-const socket = new WebSocket('ws://localhost:8080');
+const socket = new WebSocket('ws://localhost:8181');
 let chat = [];
 const chatHtml = document.getElementById("chat");
 const maxChatLength = 10;
@@ -34,6 +34,6 @@ function removeOldestFromPage() {
 
 function addOnPage(text) {
   const temp = document.createElement("p");
-  temp.textContent = text; // é mais seguro que innerHTML
+  temp.textContent = text; // descobri q é mais seguro que innerHTML
   chatHtml.appendChild(temp);
 }
