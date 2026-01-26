@@ -5,7 +5,9 @@ import { marked } from 'marked';
 import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename)
+const __dirname = path.dirname(__filename);
+
+const CONFIG_PATH = path.join(__dirname, '../../config.json');
 
 /**
  * @module src.services.webManager.express_bootstrap
@@ -34,21 +36,28 @@ export default async function express_bootstrap(config) {
             port = config.express_port;
         }
 
+        // Middleware para parsear JSON
+        app.use(express.json());
+        
+        app.use((_req, res, next) => {
+            res.setHeader(
+                "Content-Security-Policy",
+                "default-src 'self'; connect-src 'self' ws:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
+            );
+            next();
+        });
+        
         app.use(express.static(path.join(__dirname, "../../public")));
 
         app.get('/', (_req, res) => {
             res.sendFile(path.join(__dirname, '../../public/index.html'));
         })
+        
+        app.get('/config', (_req, res) => {
+            res.sendFile(path.join(__dirname, '../../public/config.html'));
+        })
 
-        app.use((_req, res, next) => {
-            res.setHeader(
-                "Content-Security-Policy",
-                "default-src 'self'; connect-src 'self' ws:;"
-            );
-            next();
-        });
-
-        app.get('/help', (req, res) => {
+        app.get('/help', (_req, res) => {
             const md = fs.readFileSync('../src/help.md', 'utf-8');
             const html = marked(md);
             res.send(`<html><body>${html}</body></html>`);
@@ -58,6 +67,49 @@ export default async function express_bootstrap(config) {
             const md = fs.readFileSync('../src/help_BR.md', 'utf-8');
             const html = marked(md);
             res.send(`<html lang="pt-BR"><title>Ajuda PT BR</title><body>${html}</body></html>`);
+        });
+
+        // API endpoint to get config
+        app.get('/api/config', async (_req, res) => {
+            try {
+                const configData = await fs.promises.readFile(CONFIG_PATH, 'utf-8');
+                const config = JSON.parse(configData);
+                res.json(config);
+            } catch (error) {
+                res.status(500).json({ error: 'Erro ao ler configurações: ' + error.message });
+            }
+        });
+
+        // API endpoint to save config
+        app.post('/api/config', async (req, res) => {
+            try {
+                const newConfig = req.body;
+                
+                // Validate config structure
+                if (!newConfig || typeof newConfig !== 'object') {
+                    return res.status(400).json({ error: 'Configuração inválida' });
+                }
+
+                // Validate required fields
+                const requiredFields = ['type_ambience', 'use_webserver', 'use_websocket'];
+                for (const field of requiredFields) {
+                    if (!(field in newConfig)) {
+                        return res.status(400).json({ error: `Campo obrigatório ausente: ${field}` });
+                    }
+                }
+
+                // Validate nested structures
+                if (newConfig.type_ambience === 'dev' && !newConfig.dev_config) {
+                    return res.status(400).json({ error: 'dev_config é obrigatório no modo de desenvolvimento' });
+                }
+
+                // Write config to file with pretty formatting
+                await fs.promises.writeFile(CONFIG_PATH, JSON.stringify(newConfig, null, 2), 'utf-8');
+                
+                res.json({ success: true, message: 'Configurações salvas com sucesso' });
+            } catch (error) {
+                res.status(500).json({ error: 'Erro ao salvar configurações: ' + error.message });
+            }
         });
 
         // Inicia o servidor e guarda a referência
