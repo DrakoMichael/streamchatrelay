@@ -1,5 +1,5 @@
 import Database from "better-sqlite3";
-import loadSettings from "../settings/loadSettings.js";
+import loadSettings from "../settings/loadsettings.js";
 
 /**
  * @module src.services.dataBase.sqlite3_bootstrap

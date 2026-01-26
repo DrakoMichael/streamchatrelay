@@ -15,7 +15,7 @@
  */
 
 /** @imports **/
-import loadSettings from "./services/settings/loadSettings.js";
+import loadSettings from "./services/settings/loadsettings.js";
 import bootstrapApp from "./services/app/bootstrapApp.js";
 
 class main{

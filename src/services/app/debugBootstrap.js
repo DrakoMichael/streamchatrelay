@@ -1,5 +1,8 @@
-import websocket_bootstrap from '../webSocket/websocket_bootstrap.js';
+import websocket_bootstrap from '../websocket/websocket_bootstrap.js';
 import TwitchConnectionWS from '../externalConnections/twitch/connectionWS.js';
+
+// Store Twitch connection outside of the class
+let twitchConnectionInstance = null;
 
 class debugBootstrap {
     /**
@@ -20,7 +23,7 @@ class debugBootstrap {
             twitchConnection.connect();
             
             // Store connection instance for later use
-            this.twitchConnection = twitchConnection;
+            twitchConnectionInstance = twitchConnection;
         } else {
             console.log('[Debug Bootstrap] Twitch connection disabled in config');
         }
@@ -31,7 +34,7 @@ class debugBootstrap {
      * @returns {TwitchConnectionWS|null}
      */
     static getTwitchConnection() {
-        return this.twitchConnection || null;
+        return twitchConnectionInstance;
     }
 }
 
