@@ -30,6 +30,7 @@ export default class TwitchConnectionWS {
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 5;
         this.keepaliveTimeoutHandle = null;
+        this.keepaliveTimeoutSeconds = 10; // Default keepalive timeout
         this.config = config;
     }
 
@@ -139,8 +140,9 @@ export default class TwitchConnectionWS {
         // Reset reconnection counter on successful welcome
         this.reconnectAttempts = 0;
 
-        // Setup keepalive timeout monitoring
+        // Store and setup keepalive timeout monitoring
         if (keepaliveTimeoutSeconds) {
+            this.keepaliveTimeoutSeconds = keepaliveTimeoutSeconds;
             this.setupKeepaliveTimeout(keepaliveTimeoutSeconds);
         }
 
@@ -160,11 +162,14 @@ export default class TwitchConnectionWS {
     handleKeepalive(message) {
         console.log('[Twitch WS] Keepalive received');
         
-        // Reset the keepalive timeout
-        const keepaliveTimeoutSeconds = message.metadata?.message_timestamp 
-            ? 10 // Default to 10 seconds if not specified
-            : 10;
-        this.setupKeepaliveTimeout(keepaliveTimeoutSeconds);
+        // Reset the keepalive timeout using the same timeout value
+        // The timeout was already set in the welcome message
+        if (this.keepaliveTimeoutHandle) {
+            this.clearKeepaliveTimeout();
+            // Use the stored timeout from welcome message, default to 10 if not set
+            const timeoutSeconds = this.keepaliveTimeoutSeconds || 10;
+            this.setupKeepaliveTimeout(timeoutSeconds);
+        }
     }
 
     /**
