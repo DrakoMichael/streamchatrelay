@@ -12,7 +12,6 @@ import WsFunctions from "./ws_functions.js";
  * @returns {WsFunctions|null} Instância de WsFunctions ou null em caso de falha
  * @property {function} init - Inicializa o WebSocket com a configuração fornecida
  * @property {function} getInstance - Retorna a instância atual de WsFunctions
- * @property {function} ignite_test - Método de teste para verificar a funcionalidade do bootstrap
  * @property {static websocket_bootstrap} instance - Instância singleton da classe websocket_bootstrap
 **/
 
@@ -50,10 +49,6 @@ class websocket_bootstrap {
   static getInstance() {
     if (!wsFunctionsInstance) return null;
     return wsFunctionsInstance;
-  }
-
-  static async ignite_test() {
-    if (this.getInstance()) return console.log("WebSocket Bootstrap is operational.");
   }
 
 };

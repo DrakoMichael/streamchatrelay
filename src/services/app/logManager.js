@@ -70,7 +70,7 @@ class logManager {
      * Retorna caminho completo do arquivo de log
      * @private
      * @returns {string} Caminho absoluto do arquivo
-     */
+    **/
     static getLogFilePath() {
         return path.join(this.logsDir, this.getLogFileName());
     }
@@ -85,7 +85,7 @@ class logManager {
     static writeLog(level, message, data = null) {
         const timestamp = this.getTimestamp();
         const levelObj = level;
-        
+
         // Formata mensagem
         let logMessage = `[${timestamp}] [${levelObj.label}] ${message}`;
         if (data) {
@@ -104,7 +104,7 @@ class logManager {
      * Escreve mensagem no arquivo de log
      * @private
      * @param {string} message - Mensagem formatada
-     */
+    **/
     static writeToFile(message) {
         try {
             const logFile = this.getLogFilePath();
