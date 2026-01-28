@@ -1,0 +1,17 @@
+import startSettingsService from "../settings/app.js";
+import startLogService from "../log/app.js";
+
+export default class AppBootstrap {
+    static async safeInit(service) {
+        try {
+            await service();
+        } catch (error) {
+            console.error('Error during app initialization:', error);
+        }
+    }
+
+    static async ignite() {
+        await this.safeInit(startSettingsService);
+        await this.safeInit(startLogService);
+    }
+}
