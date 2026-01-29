@@ -4,9 +4,9 @@ const router = Router();
 
 router.get("/", (req, res) => {
   res.json({
-    id: req.params.logService,
-    name: "logDeExemplo",
+    id: req.params.config,
+    name: "cspammer",
   });
 });
 
-export default router;  
+export default router;

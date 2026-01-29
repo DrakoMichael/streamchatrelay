@@ -1,7 +1,9 @@
 import startSettingsService from "../settings/app.js";
 import startLogService from "../log/app.js";
+import startSpamGeneratorService from "../utils/spamGenerator-service/app.js";
 
 export default class AppBootstrap {
+    
     static async safeInit(service) {
         try {
             await service();
@@ -13,5 +15,6 @@ export default class AppBootstrap {
     static async ignite() {
         await this.safeInit(startSettingsService);
         await this.safeInit(startLogService);
+        await this.safeInit(startSpamGeneratorService);
     }
 }
