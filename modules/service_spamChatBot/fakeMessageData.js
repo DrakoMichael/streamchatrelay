@@ -2,7 +2,7 @@
  * @module src.services.spamGenerator.fakeMessageData
  */
 
-export default {
+const fakeMessageData = {
     plataforms: ["Youtube", "Twitch", "Facebook", "TikTok", "Instagram", "Discord", "Reddit", "Twitter", "LinkedIn", "Snapchat"
   ],
   nome: [
@@ -70,3 +70,5 @@ export default {
     "Den svarta snön föll uppåt och sang en kärlekssång för ett osynligt barn."
   ]
 };
+
+export default fakeMessageData;

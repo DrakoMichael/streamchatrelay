@@ -17,13 +17,16 @@
  */
 
 /** @Imports **/
-import liveChatSpam from "../spamGenerator/liveChatSpam.js";
-import express_bootstrap from "../webManager/express_bootstrap.js";
+import express_bootstrap from "../webmanager/express_bootstrap.js";
 import sqlite3_bootstrap from "../dataBase/sqlite3_bootstrap.js";
 import sqlite3_bootstrap_memory from "../dataBase/sqlite3_bootstrap_memory.js";
-import websocket_bootstrap from "../webSocket/websocket_bootstrap.js";
+import websocket_bootstrap from "../websocket/websocket_bootstrap.js";
 import debugBootstrap from "./debugBootstrap.js";
 import logManager from "./logManager.js";
+
+//modules
+import spamChatBot from '../../../modules/service_spamChatBot/spamChatBot.js';
+import Spammer from '../../../modules/service_spamChatBot/spammer.js';
 
 
 /**
@@ -103,7 +106,9 @@ class bootstrapApp {
 
       // Spam Generator must be initialized AFTER WebSocket
       if (config.dev_config?.enable_spam) {
-        await this.safeInit('Spam Generator', liveChatSpam, config);
+        const spammer = new Spammer(config);
+        spammer.start();
+        this.initializedModules.push('Spam Generator');
       }
 
       logManager.info(`[BOOTSTRAP] SUCCESS STARTER \n Activated modules: ${this.initializedModules.join(', ')}\n`);

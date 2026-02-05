@@ -5,8 +5,9 @@
   "dev_config": { 
     "dev_websocket_port": 8181,
     "dev_express_port": 3232,
-    "enable_spam": true,
     "connected_chat_notify": true,
+    "enable_spam": true,
+    "spam_module_websocket_port": 8282,
     "print_spam_chats": false
   },
   "twitch": {
