@@ -1,23 +1,14 @@
-import loadSettings from "../settings/loadSettings.js";
-import WebSocket from "ws";
-
-const config = await loadSettings();
+import { WebSocket } from "ws";
 
 /**
+ * @author Michael Mello
  * @module src.services.webSocket.ws_functions
  */
-
 export default class WsFunctions {
-  constructor(wss) {
+  constructor(wss, config) {
     this.wss = wss;
+    this.config = config;
     this.register();
-  }
-
-  /**
-   * to-do 
-   */
-  debug() {
-    return true;
   }
 
   register() {
@@ -25,36 +16,43 @@ export default class WsFunctions {
   }
 
   onConnection(ws) {
-    if(config.dev_config.connected_chat_notify) {
+    if (this.config.dev_config.connected_chat_notify) {
       console.log("Cliente conectado");
       ws.send("conectado");
     }
-    
+
     ws.on("message", (msg) => this.onMessage(ws, msg));
     ws.on("close", () => this.onClose(ws));
   }
 
-  onMessage(_ws, msg) {
-    const text = msg.toString();
-    // console.log("Mensagem:", text);
-
-    // broadcast da mensagem recebida
-    this.sendNewChat(text);
-  }
-
   onClose() {
-    if(config.dev_config.connected_chat_notify) {
+    if (this.config.dev_config.connected_chat_notify) {
       console.log("Cliente desconectado");
     }
   }
 
-  sendNewChat(text) {
+  broadcast(payload) {
+    let sentCount = 0;
     this.wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
-        client.send(text);
+        client.send(payload);
+        sentCount++;
       }
     });
+    
+    if (this.config.dev_config?.print_spam_chats) {
+      console.log(`[WEBSOCKET] Broadcast sent to ${sentCount} client(s)`);
+    }
   }
 
-}
+  run(type, payload) {
+    switch (type) {
+      case "broadcast":
+        this.broadcast(payload);
+        return true;
 
+      default:
+        return false;
+    }
+  }
+}

@@ -1,6 +1,6 @@
 node_modules/
-./src/logs/
-./src/logs/*.log
+src/logs/
+src/logs/*.log
 ./src/.config.json.swp
 ./src/services/dataBase/dataBase*
 .env
@@ -10,4 +10,4 @@ node_modules/
 minify.js
 dist/
 jsconfig.json
-README.md
+*.backup

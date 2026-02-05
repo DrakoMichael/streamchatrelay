@@ -24,7 +24,8 @@ export default function websocket_starter(config) {
         return wss;
 
     } catch (error) {
-        return null;
+        console.error("Erro ao iniciar WebSocket Server:", error);
+        throw error;
     }
 
 };

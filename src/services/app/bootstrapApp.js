@@ -17,13 +17,16 @@
  */
 
 /** @Imports **/
-import liveChatSpam from "../spamGenerator/liveChatSpam.js";
-import express_bootstrap from "../webManager/express_bootstrap.js";
+import express_bootstrap from "../webmanager/express_bootstrap.js";
 import sqlite3_bootstrap from "../dataBase/sqlite3_bootstrap.js";
 import sqlite3_bootstrap_memory from "../dataBase/sqlite3_bootstrap_memory.js";
-import websocket_bootstrap from "../webSocket/websocket_bootstrap.js";
+import websocket_bootstrap from "../websocket/websocket_bootstrap.js";
 import debugBootstrap from "./debugBootstrap.js";
 import logManager from "./logManager.js";
+
+//modules
+import spamChatBot from '../../../modules/service_spamChatBot/spamChatBot.js';
+import Spammer from '../../../modules/service_spamChatBot/spammer.js';
 
 
 /**
@@ -57,15 +60,16 @@ class bootstrapApp {
    * @param {string} moduleName - Nome do módulo para logs
    * @param {Function} initFunction - Função de inicialização do módulo
    * @param {Object} config - Configuração da aplicação
-   * @returns {Promise<boolean>} true se inicializou com sucesso
+   * @returns {Promise<any>} Retorna o resultado da função de inicialização
    */
   static async safeInit(moduleName, initFunction, config) {
     try {
-      await initFunction(config);
+      const result = await initFunction(config);
       this.initializedModules.push(moduleName);
-      return true;
+      return result;
     } catch (error) {
       logManager.error(`[BOOTSTRAP] ✗ Error initializing ${moduleName}: ${error.message}`, error);
+      return null;
     }
   }
 
@@ -100,8 +104,11 @@ class bootstrapApp {
         await this.safeInit('Debug Connection', debugBootstrap.init, config);
       }
 
-      if (config.type_ambience === "dev" && config.dev_config?.enable_spam) {
-        await this.safeInit('Spam Generator', liveChatSpam, config);
+      // Spam Generator must be initialized AFTER WebSocket
+      if (config.dev_config?.enable_spam) {
+        const spammer = new Spammer(config);
+        spammer.start();
+        this.initializedModules.push('Spam Generator');
       }
 
       logManager.info(`[BOOTSTRAP] SUCCESS STARTER \n Activated modules: ${this.initializedModules.join(', ')}\n`);

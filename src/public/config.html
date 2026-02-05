@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - Stream Chat Relay</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            line-height: 1.5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 24px;
+        }
+
+        h1 {
+            color: #f0f6fc;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #8b949e;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            color: #f0f6fc;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            color: #c9d1d9;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .label-description {
+            display: block;
+            color: #8b949e;
+            font-size: 12px;
+            font-weight: 400;
+            margin-top: -4px;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px 12px;
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #c9d1d9;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #58a6ff;
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+        }
+
+        input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            cursor: pointer;
+            accent-color: #238636;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+            font-weight: 400;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #30363d;
+        }
+
+        button {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 6px;
+            border: 1px solid;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #238636;
+            border-color: #238636;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: #2ea043;
+            border-color: #2ea043;
+        }
+
+        .btn-secondary {
+            background-color: #21262d;
+            border-color: #30363d;
+            color: #c9d1d9;
+        }
+
+        .btn-secondary:hover {
+            background-color: #30363d;
+            border-color: #8b949e;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: rgba(46, 160, 67, 0.15);
+            border: 1px solid #238636;
+            color: #3fb950;
+        }
+
+        .alert-error {
+            background-color: rgba(248, 81, 73, 0.15);
+            border: 1px solid #da3633;
+            color: #f85149;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚙️ Configurações</h1>
+        <p class="subtitle">Edite as configurações da aplicação Stream Chat Relay</p>
+
+        <div id="alert" class="alert"></div>
+
+        <form id="configForm">
+            <!-- Configurações Gerais -->
+            <div class="section">
+                <h2 class="section-title">Configurações Gerais</h2>
+                
+                <div class="form-group">
+                    <label for="type_ambience">Ambiente</label>
+                    <span class="label-description">Modo de execução da aplicação</span>
+                    <select id="type_ambience" name="type_ambience">
+                        <option value="dev">Desenvolvimento (dev)</option>
+                        <option value="prod">Produção (prod)</option>
+                    </select>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="use_webserver" name="use_webserver">
+                    <label for="use_webserver">Ativar servidor web Express</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="debbug" name="debbug">
+                    <label for="debbug">Modo debug</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="use_websocket" name="use_websocket">
+                    <label for="use_websocket">Ativar WebSocket</label>
+                </div>
+            </div>
+
+            <!-- Configurações de Desenvolvimento -->
+            <div class="section" id="dev_section">
+                <h2 class="section-title">Configurações de Desenvolvimento</h2>
+                
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="dev_websocket_port">Porta WebSocket (Dev)</label>
+                        <input type="number" id="dev_websocket_port" name="dev_websocket_port">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dev_express_port">Porta Express (Dev)</label>
+                        <input type="number" id="dev_express_port" name="dev_express_port">
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="enable_spam" name="enable_spam">
+                    <label for="enable_spam">Ativar gerador de mensagens de teste</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="connected_chat_notify" name="connected_chat_notify">
+                    <label for="connected_chat_notify">Notificações de conexão/desconexão</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="print_spam_chats" name="print_spam_chats">
+                    <label for="print_spam_chats">Imprimir mensagens geradas no console</label>
+                </div>
+            </div>
+
+            <!-- Configurações de Produção -->
+            <div class="section" id="prod_section">
+                <h2 class="section-title">Configurações de Produção</h2>
+                
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="websocket_port">Porta WebSocket</label>
+                        <input type="number" id="websocket_port" name="websocket_port">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="express_port">Porta Express</label>
+                        <input type="number" id="express_port" name="express_port">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configurações Twitch -->
+            <div class="section">
+                <h2 class="section-title">Twitch</h2>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="enable_twitch_connection" name="enable_twitch_connection">
+                    <label for="enable_twitch_connection">Ativar conexão com Twitch</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="client_id">Client ID</label>
+                    <input type="text" id="client_id" name="client_id" placeholder="Seu Client ID do Twitch">
+                </div>
+
+                <div class="form-group">
+                    <label for="access_token">Access Token</label>
+                    <input type="text" id="access_token" name="access_token" placeholder="Seu Access Token do Twitch">
+                </div>
+            </div>
+
+            <!-- Configurações de Banco de Dados -->
+            <div class="section">
+                <h2 class="section-title">Banco de Dados</h2>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="enable_database" name="enable_database">
+                    <label for="enable_database">Ativar banco de dados SQLite</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="enable_in_disk_db" name="enable_in_disk_db">
+                    <label for="enable_in_disk_db">Armazenar em disco</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="enable_in_memory_db" name="enable_in_memory_db">
+                    <label for="enable_in_memory_db">Usar banco em memória</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="indisk_db_name">Nome do banco de dados em disco</label>
+                    <input type="text" id="indisk_db_name" name="indisk_db_name">
+                </div>
+            </div>
+
+            <!-- Controle de Dados -->
+            <div class="section">
+                <h2 class="section-title">Controle de Dados</h2>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="storage_messages_enabled" name="storage_messages_enabled">
+                    <label for="storage_messages_enabled">Ativar armazenamento de mensagens</label>
+                </div>
+
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="max_stored_messages">Máximo de mensagens armazenadas</label>
+                        <input type="number" id="max_stored_messages" name="max_stored_messages">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message_cleanup_interval_ms">Intervalo de limpeza (ms)</label>
+                        <input type="number" id="message_cleanup_interval_ms" name="message_cleanup_interval_ms">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Análise de Dados -->
+            <div class="section">
+                <h2 class="section-title">Análise de Dados</h2>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="enable_data_analysis" name="enable_data_analysis">
+                    <label for="enable_data_analysis">Ativar análise de dados</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="data_analysis_interval_ms">Intervalo de análise (ms)</label>
+                    <input type="number" id="data_analysis_interval_ms" name="data_analysis_interval_ms">
+                </div>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="button-group">
+                <button type="submit" class="btn-primary">💾 Salvar Configurações</button>
+                <button type="button" class="btn-secondary" id="reloadBtn">🔄 Recarregar</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="config.js"></script>
+</body>
+</html>
