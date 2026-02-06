@@ -25,8 +25,10 @@ import debugBootstrap from "./debugBootstrap.js";
 import logManager from "./logManager.js";
 
 //modules
-import spamChatBot from '../../../modules/service_spamChatBot/spamChatBot.js';
 import Spammer from '../../../modules/service_spamChatBot/spammer.js';
+
+//gateway
+import app from '../../../modules/gateway/app.js';
 
 
 /**
@@ -83,6 +85,9 @@ class bootstrapApp {
     logManager.info('\n[BOOTSTRAP] Starting StreamChatRelay application...');
     
     try {
+      //gateway - need development
+      this.safeInit('Gateway Service', app, config);
+
       if (config.database?.enable_database) {
         if (config.database.enable_in_disk_db) {
           await this.safeInit('SQLite Database (Disk)', sqlite3_bootstrap, config);

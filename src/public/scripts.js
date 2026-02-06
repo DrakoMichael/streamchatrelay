@@ -1,4 +1,4 @@
-const socket = new WebSocket('ws://localhost:8181');
+const socket = new WebSocket('ws://localhost:8081');
 let chat = [];
 const chatHtml = document.getElementById("chat");
 const maxChatLength = 10;

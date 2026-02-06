@@ -2,19 +2,16 @@
   "type_ambience": "dev",
   "use_webserver": true,
   "debbug": false,
-  "dev_config": { 
+  "dev_config": {
     "dev_websocket_port": 8181,
     "dev_express_port": 3232,
-    "connected_chat_notify": true,
     "enable_spam": true,
-    "spam_module_websocket_port": 8282,
+    "connected_chat_notify": true,
     "print_spam_chats": false
   },
   "twitch": {
     "client_id": "",
-    "client_secret": "",
     "access_token": "",
-    "refresh_token": "",
     "enable_twitch_connection": true
   },
   "database": {
