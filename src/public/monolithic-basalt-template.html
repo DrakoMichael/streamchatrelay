@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template | Monolithic Basalt</title>
+    
+    <!-- Importa o design system -->
+    <link rel="stylesheet" href="monolithic-basalt.css">
+</head>
+<body>
+    <div class="viewport">
+        <!-- HEADER -->
+        <header>
+            <span class="system-id">Nome do Sistema // Identificador</span>
+            <h1>Título da Página</h1>
+            <p class="subtitle">Descrição breve do propósito da página</p>
+        </header>
+
+        <!-- ALERT (opcional) -->
+        <div id="alert" class="alert"></div>
+
+        <!-- FORMULÁRIO (se aplicável) -->
+        <form id="mainForm">
+
+            <!-- SEÇÃO 1 -->
+            <section class="section">
+                <h2 class="section-title">Título da Seção</h2>
+                <div class="config-group">
+                    
+                    <!-- Row com Select -->
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Campo Select</span>
+                            <span class="row-desc">Descrição do que este campo faz</span>
+                        </div>
+                        <div class="row-control">
+                            <select id="example_select" name="example_select">
+                                <option value="opt1">Opção 1</option>
+                                <option value="opt2">Opção 2</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Row com Toggle Switch -->
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Toggle Switch</span>
+                            <span class="row-desc">Ativa ou desativa uma funcionalidade</span>
+                        </div>
+                        <div class="row-control">
+                            <label class="switch">
+                                <input type="checkbox" id="example_toggle" name="example_toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Row com Input de Texto -->
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Campo de Texto</span>
+                            <span class="row-desc">Digite uma informação importante</span>
+                        </div>
+                        <div class="row-control">
+                            <input type="text" id="example_text" name="example_text" placeholder="Texto...">
+                        </div>
+                    </div>
+
+                    <!-- Row com Status Dot -->
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Status da Conexão</span>
+                            <span class="row-desc">
+                                <span class="status-dot"></span>
+                                Conectado a <code>wss://example.com</code>
+                            </span>
+                        </div>
+                        <div class="row-control">
+                            <input type="text" placeholder="URL...">
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- SEÇÃO 2 - Grid Layout (2 colunas) -->
+            <section class="section">
+                <h2 class="section-title">Seção com Grid</h2>
+                <div class="config-group">
+                    <div class="grid">
+                        <!-- Coluna 1 -->
+                        <div class="row">
+                            <div class="row-meta">
+                                <span class="row-title">Campo 1</span>
+                                <span class="row-desc">Primeira coluna</span>
+                            </div>
+                            <div class="row-control">
+                                <input type="number" placeholder="100">
+                            </div>
+                        </div>
+
+                        <!-- Coluna 2 -->
+                        <div class="row">
+                            <div class="row-meta">
+                                <span class="row-title">Campo 2</span>
+                                <span class="row-desc">Segunda coluna</span>
+                            </div>
+                            <div class="row-control">
+                                <input type="number" placeholder="200">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rows normais continuam abaixo do grid -->
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Campo Normal</span>
+                            <span class="row-desc">Volta ao layout normal</span>
+                        </div>
+                        <div class="row-control">
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Spacer para não ficar atrás dos botões fixos -->
+            <div class="spacer"></div>
+        </form>
+    </div>
+
+    <!-- BOTÕES FIXOS -->
+    <div class="btn-container">
+        <button type="button" class="btn" onclick="location.reload()">Cancelar</button>
+        <button type="submit" form="mainForm" class="btn btn-primary">Salvar</button>
+    </div>
+
+    <!-- Importa o JavaScript do design system -->
+    <script src="monolithic-basalt.js"></script>
+
+    <!-- Script específico da página -->
+    <script>
+        // Exemplo: Manipulação do formulário
+        document.getElementById('mainForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Valida o formulário
+            if (!MonolithicBasalt.validateForm(e.target)) {
+                return;
+            }
+
+            // Mostra loading
+            const submitBtn = document.querySelector('.btn-primary');
+            MonolithicBasalt.setButtonLoading(submitBtn, true);
+
+            try {
+                // Simula salvamento
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                // Mostra sucesso
+                MonolithicBasalt.showAlert('Configurações salvas com sucesso!', 'success', 3000);
+            } catch (error) {
+                MonolithicBasalt.showAlert('Erro ao salvar: ' + error.message, 'error', 4000);
+            } finally {
+                MonolithicBasalt.setButtonLoading(submitBtn, false);
+            }
+        });
+
+        // Exemplo: Criar row dinamicamente
+        function addDynamicRow() {
+            const configGroup = document.querySelector('.config-group');
+            const newRow = MonolithicBasalt.createRow({
+                title: 'Campo Dinâmico',
+                description: 'Criado via JavaScript',
+                control: '<input type="text" placeholder="Dinâmico...">'
+            });
+            configGroup.appendChild(newRow);
+        }
+
+        // Exemplo: Toggle com callback
+        document.querySelectorAll('.switch input').forEach(toggle => {
+            toggle.addEventListener('change', (e) => {
+                MonolithicBasalt.animateToggle(e.target, () => {
+                    console.log('Toggle alterado:', e.target.id, e.target.checked);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

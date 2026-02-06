@@ -1,24 +1,23 @@
 import { WebSocketServer } from 'ws';
-import Spammer from './spammer.js';
 
-class spamChatBot {
+class spamChatBot_WebSocketServer {
   // singleton instance
   static instance = null;
 
   /**
    * Start the singleton WebSocket server.
-   * Usage: await spamChatBot.start({ port: 8081, pingInterval: 10000 })
+   * Usage: await spamChatBot_WebSocketServer.start({ port: 8081, pingInterval: 10000 })
    */
   static async start(conf = {}) {
-    if (!spamChatBot.instance) {
-      spamChatBot.instance = new spamChatBot(conf);
-      await spamChatBot.instance._ignite(conf.port);
+    if (!spamChatBot_WebSocketServer.instance) {
+      spamChatBot_WebSocketServer.instance = new spamChatBot_WebSocketServer(conf);
+      await spamChatBot_WebSocketServer.instance._ignite(conf.port);
     }
-    return spamChatBot.instance;
+    return spamChatBot_WebSocketServer.instance;
   }
 
   static getInstance() {
-    return spamChatBot.instance;
+    return spamChatBot_WebSocketServer.instance;
   }
 
   constructor(conf = {}) {
@@ -88,11 +87,11 @@ class spamChatBot {
     return new Promise((resolve) => {
       this.wss.close(() => {
         this.wss = null;
-        spamChatBot.instance = null;
+        spamChatBot_WebSocketServer.instance = null;
         resolve();
       });
     });
   }
 }
 
-export default spamChatBot;
+export default spamChatBot_WebSocketServer;

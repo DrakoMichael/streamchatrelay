@@ -1,5 +1,5 @@
 import quotes from "./fakeMessageData.js";
-import spamChatBot from "./spamChatBot.js";
+import spamChatBot_WebSocketServer from "./spamChatBot_WebSocketServer.js";
 
 let loopIntervalId = null;
 
@@ -16,9 +16,9 @@ class Spammer {
     if (mode === "test") return this.testLiveChatSpam();
 
     // ensure bot is running (start if not)
-    let bot = spamChatBot.getInstance();
+    let bot = spamChatBot_WebSocketServer.getInstance();
     if (!bot) {
-      bot = await spamChatBot.start({ port: this.config.spam_port || 8081, pingInterval: this.config.pingInterval });
+      bot = await spamChatBot_WebSocketServer.start({ port: this.config.spam_port || 8081, pingInterval: this.config.pingInterval });
     }
     this.bot = bot;
 
