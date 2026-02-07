@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conexões | Stream Chat Relay</title>
+    
+    <!-- Monolithic Basalt Design System -->
+    <link rel="stylesheet" href="monolithic-basalt.css">
+</head>
+<body>
+    <div class="viewport">
+        <header>
+            <span class="system-id">Stream Chat Relay // Connections Panel</span>
+            <h1>Configuração de Conexões</h1>
+            <p class="subtitle">Configure suas contas de streaming</p>
+        </header>
+
+        <div id="alert" class="alert"></div>
+
+        <form id="connectionsForm">
+            <!-- Twitch Configuration -->
+            <section class="section">
+                <h2 class="section-title">🎮 Twitch</h2>
+                <div class="config-group">
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Ativar Twitch</span>
+                            <span class="row-desc">Conectar e receber mensagens da Twitch</span>
+                        </div>
+                        <div class="row-control">
+                            <label class="switch">
+                                <input type="checkbox" id="twitch_enabled" name="twitch_enabled">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Token OAuth</span>
+                            <span class="row-desc">Token de autenticação da Twitch</span>
+                        </div>
+                        <div class="row-control">
+                            <input type="password" id="twitch_token" name="twitch_token" placeholder="oauth:xxxxxxxxxxxxx">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Canal</span>
+                            <span class="row-desc">Nome do canal Twitch</span>
+                        </div>
+                        <div class="row-control">
+                            <input type="text" id="twitch_channel" name="twitch_channel" placeholder="seu_canal">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Nome de Usuário (Bot)</span>
+                            <span class="row-desc">Nickname do bot na Twitch</span>
+                        </div>
+                        <div class="row-control">
+                            <input type="text" id="twitch_username" name="twitch_username" placeholder="seu_bot_username">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- YouTube Configuration -->
+            <section class="section">
+                <h2 class="section-title">📺 YouTube</h2>
+                <div class="config-group">
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Ativar YouTube</span>
+                            <span class="row-desc">Conectar e receber mensagens do YouTube</span>
+                        </div>
+                        <div class="row-control">
+                            <label class="switch">
+                                <input type="checkbox" id="youtube_enabled" name="youtube_enabled">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">API Key</span>
+                            <span class="row-desc">Chave de API do YouTube Data API</span>
+                        </div>
+                        <div class="row-control">
+                            <input type="password" id="youtube_api_key" name="youtube_api_key" placeholder="AIzaSy...">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">ID do Canal</span>
+                            <span class="row-desc">ID único do seu canal YouTube</span>
+                        </div>
+                        <div class="row-control">
+                            <input type="text" id="youtube_channel_id" name="youtube_channel_id" placeholder="UCxxxxxxxxxxxxxxxx">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">ID da Transmissão ao Vivo</span>
+                            <span class="row-desc">ID da live atual (mude quando iniciar nova transmissão)</span>
+                        </div>
+                        <div class="row-control">
+                            <input type="text" id="youtube_live_id" name="youtube_live_id" placeholder="xxxxxxxxxxxxx">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Rumble Configuration -->
+            <section class="section">
+                <h2 class="section-title">🎪 Rumble</h2>
+                <div class="config-group">
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Ativar Rumble</span>
+                            <span class="row-desc">Conectar e receber mensagens do Rumble</span>
+                        </div>
+                        <div class="row-control">
+                            <label class="switch">
+                                <input type="checkbox" id="rumble_enabled" name="rumble_enabled">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Token/Chave de API</span>
+                            <span class="row-desc">Token de autenticação do Rumble</span>
+                        </div>
+                        <div class="row-control">
+                            <input type="password" id="rumble_token" name="rumble_token" placeholder="sua_chave_api">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Canal/ID da Transmissão</span>
+                            <span class="row-desc">Identificador do seu canal ou transmissão</span>
+                        </div>
+                        <div class="row-control">
+                            <input type="text" id="rumble_channel" name="rumble_channel" placeholder="seu_canal_rumble">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Kick Configuration -->
+            <section class="section">
+                <h2 class="section-title">🦶 Kick</h2>
+                <div class="config-group">
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Ativar Kick</span>
+                            <span class="row-desc">Conectar e receber mensagens do Kick</span>
+                        </div>
+                        <div class="row-control">
+                            <label class="switch">
+                                <input type="checkbox" id="kick_enabled" name="kick_enabled">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Token/Chave de API</span>
+                            <span class="row-desc">Chave de autenticação do Kick</span>
+                        </div>
+                        <div class="row-control">
+                            <input type="password" id="kick_token" name="kick_token" placeholder="sua_chave_kick">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Canal</span>
+                            <span class="row-desc">Nome do seu canal Kick</span>
+                        </div>
+                        <div class="row-control">
+                            <input type="text" id="kick_channel" name="kick_channel" placeholder="seu_canal_kick">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TikTok Live Configuration -->
+            <section class="section">
+                <h2 class="section-title">🎵 TikTok Live</h2>
+                <div class="config-group">
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Ativar TikTok Live</span>
+                            <span class="row-desc">Conectar e receber mensagens do TikTok Live</span>
+                        </div>
+                        <div class="row-control">
+                            <label class="switch">
+                                <input type="checkbox" id="tiktok_enabled" name="tiktok_enabled">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Nome de Usuário</span>
+                            <span class="row-desc">Seu username do TikTok</span>
+                        </div>
+                        <div class="row-control">
+                            <input type="text" id="tiktok_username" name="tiktok_username" placeholder="seu_username_tiktok">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="row-meta">
+                            <span class="row-title">Session ID</span>
+                            <span class="row-desc">ID da sessão para autenticação</span>
+                        </div>
+                        <div class="row-control">
+                            <input type="password" id="tiktok_session" name="tiktok_session" placeholder="session_token">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="spacer"></div>
+        </form>
+    </div>
+
+    <div class="btn-container">
+        <button type="button" class="btn" id="backBtn">← Voltar</button>
+        <button type="button" class="btn" id="configBtn">⚙ Configurações</button>
+        <button type="button" class="btn" id="reloadBtn">Descartar</button>
+        <button type="submit" form="connectionsForm" class="btn btn-primary">Salvar Conexões</button>
+    </div>
+
+    <!-- Monolithic Basalt Design System JavaScript -->
+    <script src="monolithic-basalt.js"></script>
+    
+    <!-- Application Specific Logic -->
+    <script src="connections.js"></script>
+</body>
+</html>

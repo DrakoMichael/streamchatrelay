@@ -1,5 +1,4 @@
 import Database from "better-sqlite3";
-import loadSettings from "../settings/loadsettings.js";
 
 /**
  * @module src.services.dataBase.sqlite3_bootstrap
@@ -7,7 +6,9 @@ import loadSettings from "../settings/loadsettings.js";
 
 export default async function sqlite3_bootstrap(config) {
 
-    const db = new Database(`../dataBase/dataBases/${config.database.indisk_db_name}.db`);
+
+    const date = new Date();
+    const db = new Database(`./dataBase/${config.database.indisk_db_name_+date.toISOString()}.db`);
     db.prepare(`
         CREATE TABLE IF NOT EXISTS lorem (
             info TEXT

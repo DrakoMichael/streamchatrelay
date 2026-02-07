@@ -7,16 +7,18 @@ const app = express();
 /* =========
    Middleware de auth (antes do proxy)
    ========= */
-function auth(req, res, next) {
-    const token = req.headers.authorization;
+function auth(req, res, next) { 
+    //jwt não necessário por enquanto em módulos internos
+    //const token = req.headers.authorization;
     //console.log("Token recebido:", token);
 
-//   if (!token) {
-//     return res.status(401).json({ error: "Sem token" });
-//   }
 
-  // valida JWT aqui
-  // jwt.verify(token, SECRET)
+    //   if (!token) {
+    //     return res.status(401).json({ error: "Sem token" });
+    //   }
+
+    // valida JWT aqui
+    // jwt.verify(token, SECRET)
 
   next();
 }
@@ -29,16 +31,14 @@ const websocketService = createProxyMiddleware({
   }
 });
 
-const config= createProxyMiddleware({
-  target: "http://localhost:3232/config", // serviço interno
+const configProxy = createProxyMiddleware({
+  target: "http://localhost:3232/config",
   changeOrigin: true,
-  pathRewrite: {
-    "^/config": ""
-  }
+  pathRewrite: { "^/config": "" }
 });
 
+app.use("/config", auth, configProxy);
 app.use("/", auth, websocketService);
-app.use("/config", auth, config);
 
 
 /* =========
@@ -68,7 +68,7 @@ const server = http.createServer(app);
 //server.on("upgrade", chatProxy.upgrade);
 
 server.listen(3000, () => {
-  console.log("Gateway rodando na 3000");
+  console.log("Gateway rodando em 3000");
 });
 
 export default app;

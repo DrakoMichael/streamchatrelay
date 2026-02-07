@@ -353,9 +353,7 @@ export default async function express_bootstrap(config) {
         });
 
         // Inicia o servidor e guarda a referência
-        const server = app.listen(port, () => {
-            console.log(`Express app listening on port ${port}`);
-        });
+        const server = app.listen(port, () => {});
 
         // Retorna objeto com app e método para fechar
         return {
