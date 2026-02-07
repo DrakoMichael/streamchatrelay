@@ -9,14 +9,18 @@
     <link rel="stylesheet" href="monolithic-basalt.css">
 </head>
 <body>
-    <div class="viewport">
-        <header>
-            <span class="system-id">Stream Chat Relay // Config Panel</span>
-            <h1>Configuração do Sistema</h1>
-            <p class="subtitle">Ajuste os parâmetros de execução e conectividade</p>
+    <div class="viewport header-wrapper">
+        <header class="viewport-header">
+            <div class="header-inner-content">
+                <div>
+                    <span class="system-id">Stream Chat Relay // Config Panel</span>
+                    <h1>Configuração do Sistema</h1>
+                    <p class="subtitle">Ajuste os parâmetros de execução e conectividade</p>
+                </div>
+            </div>
         </header>
-
-        <div id="alert" class="alert"></div>
+        <div class="viewport-content">
+            <div id="alert" class="alert"></div>
 
         <form id="configForm">
             <!-- Configurações Gerais -->
@@ -322,9 +326,12 @@
 
             <div class="spacer"></div>
         </form>
+        </div>
     </div>
 
     <div class="btn-container">
+        <button type="button" class="btn" id="backBtn">← Voltar</button>
+        <button type="button" class="btn" id="connectionsBtn">🔗 Conexões</button>
         <button type="button" class="btn" id="reloadBtn">Descartar</button>
         <button type="submit" form="configForm" class="btn btn-primary">Salvar Alterações</button>
     </div>

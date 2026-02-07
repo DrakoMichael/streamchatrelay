@@ -17,7 +17,7 @@
   "database": {
     "enable_database": false,
     "enable_in_disk_db": true,
-    "enable_in_memory_db": true,
+    "enable_in_memory_db": false,
     "indisk_db_name": "streamchatrelay_data"
   },
   "data_control": {

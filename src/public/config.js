@@ -5,9 +5,25 @@
     const form = document.getElementById('configForm');
     const alertDiv = document.getElementById('alert');
     const reloadBtn = document.getElementById('reloadBtn');
+    const backBtn = document.getElementById('backBtn');
+    const connectionsBtn = document.getElementById('connectionsBtn');
     const typeAmbienceSelect = document.getElementById('type_ambience');
     const devSection = document.getElementById('dev_section');
     const prodSection = document.getElementById('prod_section');
+
+    // Back button handler
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            window.location.href = '/';
+        });
+    }
+
+    // Connections button handler
+    if (connectionsBtn) {
+        connectionsBtn.addEventListener('click', () => {
+            window.location.href = '/connections.html';
+        });
+    }
 
     // Show/hide sections based on environment type
     function toggleSections() {

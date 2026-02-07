@@ -4,19 +4,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Live Chat</title>
+    <title>Live Chat - Stream Relay</title>
 
-    <style>
-    * {
-        margin: 0;
-        background-color: rgba(255, 255, 255, 0);
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        font-size: 25px;
-    }
-    </style>
+    <link rel="stylesheet" href="monolithic-basalt.css">
+    <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
-    <div id="chat"></div>
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Header Section -->
+        <header class="dashboard-header">
+            <div class="header-inner-wrapper">
+                <div class="header-content">
+                    <span class="system-id">STREAM CHAT RELAY</span>
+                    <h1>Live Chat Monitor</h1>
+                    <p class="subtitle">Real-time chat visualization</p>
+                </div>
+                <div class="header-status-group">
+                    <div class="header-status">
+                        <span class="status-dot" id="connectionStatus"></span>
+                        <span id="statusText">Connecting...</span>
+                    </div>
+                    <button class="btn btn-header" id="connectionsBtn" title="Connections">
+                        <span class="btn-icon">🔗</span>
+                    </button>
+                    <button class="btn btn-header" id="settingsBtn" title="Settings">
+                        <span class="btn-icon">⚙</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Panel -->
+        <div class="panel-wrapper">
+            <!-- Message Rate Chart -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <span class="chart-label">📊 MENSAGENS / TEMPO</span>
+                    <span class="chart-info" id="chartInfo">Últimos 60 segundos</span>
+                </div>
+                <div class="chart-canvas-wrapper">
+                    <canvas id="messageChart"></canvas>
+                    <div class="chart-loading" id="chartLoading">
+                        <span>Carregando gráfico...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ping Info Section -->
+            <div class="ping-info-box">
+                <div class="ping-header">
+                    <span class="ping-label">◉ HEARTBEAT</span>
+                    <span class="ping-timer" id="pingTimer">--:--:--</span>
+                </div>
+                <div class="ping-content">
+                    <div class="ping-value" id="pingValue">Waiting for ping...</div>
+                    <div class="ping-counter" id="pingCounter"></div>
+                </div>
+            </div>
+
+            <!-- Terminal-style Chat Area -->
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <span class="terminal-title">» Chat Stream</span>
+                    <span class="terminal-info" id="messageCount">Messages: 0</span>
+                </div>
+                <div class="terminal-content" id="chat"></div>
+                <div class="terminal-footer">
+                    <span class="text-dim">Waiting for messages...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Control Bar -->
+        <div class="control-bar">
+            <button class="btn btn-secondary" id="connectionsButtonBottom" title="Connections">
+                <span class="btn-icon">🔗</span> Connections
+            </button>
+            <button class="btn btn-secondary" id="configButtonBottom" title="Config">
+                <span class="btn-icon">⚙</span> Config
+            </button>
+            <button class="btn btn-secondary" id="clearBtn" title="Clear Chat">
+                <span class="btn-icon">✕</span> Clear
+            </button>
+        </div>
+    </div>
+
+    <!-- Chart.js Library com múltiplos fallbacks -->
+    <script>
+        // Lista de CDNs para tentar (incluindo versão local como último recurso)
+        const chartCDNs = [
+            'chart.min.js',  // Versão local hospedada
+            'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js',
+            'https://unpkg.com/chart.js@4.4.1/dist/chart.umd.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js'
+        ];
+        
+        let currentCDNIndex = 0;
+        
+        function loadChartJS() {
+            if (currentCDNIndex >= chartCDNs.length) {
+                console.error('✗ Todos os CDNs falharam. Chart.js não pode ser carregado.');
+                return;
+            }
+            
+            const script = document.createElement('script');
+            script.src = chartCDNs[currentCDNIndex];
+            
+            // Só usa crossOrigin para CDNs externos
+            if (chartCDNs[currentCDNIndex].startsWith('http')) {
+                script.crossOrigin = 'anonymous';
+            }
+            
+            script.onload = function() {
+                console.log('✓ Chart.js carregado com sucesso:', chartCDNs[currentCDNIndex]);
+            };
+            
+            script.onerror = function() {
+                console.warn('✗ Falha ao carregar:', chartCDNs[currentCDNIndex]);
+                currentCDNIndex++;
+                loadChartJS(); // Tenta próximo CDN
+            };
+            
+            document.head.appendChild(script);
+        }
+        
+        // Inicia o carregamento
+        loadChartJS();
+    </script>
+    
+    <script src="monolithic-basalt.js"></script>
+    <script src="scripts.js"></script>
 </body>
 </html>
-<script src="scripts.js"></script>
