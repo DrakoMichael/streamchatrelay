@@ -11,3 +11,4 @@ minify.js
 dist/
 jsconfig.json
 *.backup
+src-deprecated/
