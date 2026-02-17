@@ -14,7 +14,8 @@
     "docs": "npx jsdoc -c jsdoc.json",
     "build:js": "esbuild \"src/**/*.js\" --outdir=dist --minify --platform=node --format=esm",
     "build:assets": "cpy \"**/*.{json,env}\" dist --cwd=src --parents",
-    "build": "npm run build:js && npm run build:assets"
+    "build": "npm run build:js && npm run build:assets",
+    "dev": "node src/index.js"
   },
   "dependencies": {
     "better-sqlite3": "^12.6.0",

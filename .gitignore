@@ -1,14 +1,29 @@
+# Ignore node modules and build output 
 node_modules/
+dist/
+
+# Angular Frontend servie
+./frontend/node_modules/
+./frontend/.vscode
+./frontend/.editorconfig.swp
+./frontend/.angular/
+*.spec.ts
+*.spec.json
+
+# Logs and database files
 src/logs/
 src/logs/*.log
 ./src/.config.json.swp
 ./src/services/dataBase/dataBase*
+
+# IDE and environment files
 .env
 *.swp
 *.swo
 *.swn
 minify.js
-dist/
 jsconfig.json
 *.backup
+
+# Deprecated source code
 src-deprecated/
