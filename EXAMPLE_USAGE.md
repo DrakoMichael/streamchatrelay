@@ -1,4 +1,4 @@
-# OAuth2 Twitch Integration - Quick Start Example
+ OAuth2 Twitch Integration - Quick Start Example
 
 ## Exemplo Prático de Uso
 
