@@ -1,26 +1,16 @@
-import quotes from "./fakeMessageData.js";
-import spamChatBot_WebSocketServer from "./spamChatBot_WebSocketServer.js";
+import fakeMessageData from "./fakeMessageData.js";
 
 let loopIntervalId = null;
 
 class Spammer {
   constructor(config = {}) {
     this.config = config;
-    this.bot = null;
+    this.sendMessage = config.send_message || (() => {});
   }
 
   async start(config = this.config, mode) {
     this.config = config || this.config;
     if (!this.config || !this.config.dev_config || !this.config.dev_config.enable_spam) return;
-
-    if (mode === "test") return this.testLiveChatSpam();
-
-    // ensure bot is running (start if not)
-    let bot = spamChatBot_WebSocketServer.getInstance();
-    if (!bot) {
-      bot = await spamChatBot_WebSocketServer.start({ port: this.config.spam_port || 8081, pingInterval: this.config.pingInterval });
-    }
-    this.bot = bot;
 
     this.startSpamLoop(this.config);
   }
@@ -29,16 +19,18 @@ class Spammer {
     if (loopIntervalId) {
       clearTimeout(loopIntervalId);
       loopIntervalId = null;
+      console.log('Spam loop parado');
     }
   }
 
   generateRandomMessage() {
-    const indice = Math.floor(Math.random() * quotes.nome.length);
+    const indice = Math.floor(Math.random() * fakeMessageData.nome.length);
 
     return {
-      plataforma: quotes.plataforms[Math.floor(Math.random() * quotes.plataforms.length)],
-      usuario: quotes.nome[indice],
-      mensagem: quotes.frases[indice]
+      plataforma: fakeMessageData.plataforms[Math.floor(Math.random() * fakeMessageData.plataforms.length)],
+      usuario: fakeMessageData.nome[indice],
+      mensagem: fakeMessageData.frases[indice],
+      timestamp: new Date().toISOString()
     };
   }
 
@@ -56,20 +48,11 @@ class Spammer {
 
       if (shouldPrint) console.log(formattedMessage);
 
-      // send via spamChatBot if available
-      if (this.bot && this.bot.clients) {
-        for (const client of this.bot.clients) {
-          if (client.readyState === 1) {
-            try { client.send(formattedMessage); } catch (_) {}
-          }
-        }
-      } else {
-        // fallback to existing websocket bootstrap if present
-        const wsFunctions = websocket_bootstrap.getInstance();
-        if (wsFunctions && typeof wsFunctions.sendNewChat === 'function') {
-          try { wsFunctions.sendNewChat(formattedMessage); } catch (_) {}
-        }
-      }
+      // Enviar para RabbitMQ
+      this.sendMessage({
+        formatted: formattedMessage,
+        data: messageData
+      });
 
       const nextTime = this.generateRandomTime(minMs, maxMs);
       loopIntervalId = setTimeout(loop, nextTime);
@@ -80,21 +63,6 @@ class Spammer {
 
   generateRandomTime(minMs, maxMs) {
     return Math.floor(Math.random() * (maxMs - minMs + 1)) + minMs;
-  }
-
-  testLiveChatSpam() {
-    const messagesGenerated = [];
-
-    async function mockSendNewChat() {
-      setTimeout(() => messagesGenerated.push("teste"), 100)
-    }
-
-    mockSendNewChat();
-
-    return {
-      messages: messagesGenerated,
-      stop: () => this.stop()
-    };
   }
 }
 

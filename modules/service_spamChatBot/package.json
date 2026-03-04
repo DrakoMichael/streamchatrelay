@@ -1,0 +1,17 @@
+{
+  "name": "service_spamchatbot",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Mike",
+  "type": "module",
+  "main": "spamChatBot_WebSocketServer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.9",
+    "express": "^5.2.1",
+    "ws": "^8.19.0"
+  }
+}
