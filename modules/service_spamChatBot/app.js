@@ -9,7 +9,7 @@ const QUEUE_NAME = process.env.QUEUE_NAME || 'spam-chat-messages';
 const RETRY_INTERVAL = process.env.RETRY_INTERVAL || 5000; // 5 segundos
 const MAX_RETRIES = process.env.MAX_RETRIES || 10;
 
-let channel = null;
+let channel = true;
 let spammer = null;
 let retryCount = 0;
 let isConnecting = false;
@@ -93,6 +93,11 @@ async function initialize() {
 
 app.use(express.json());
 
+app.get('/start', async (req, res) => {
+  await spammer.start(); 
+  res.json({ status: 'Serviço de spam de chat rodando' });
+});
+
 app.post('/start', async (req, res) => {
   try {
     const config = req.body || {};
@@ -105,6 +110,11 @@ app.post('/start', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+app.get('/stop', (req, res) => {
+  spammer.stop();
+  res.json({ status: 'Spam parado' });
 });
 
 app.post('/stop', (req, res) => {
