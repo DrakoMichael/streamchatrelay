@@ -17,10 +17,12 @@
 import loadSettings from "./services/settings/loadsettings.js";
 import bootstrapApp from "./services/app/bootstrapApp.js";
 
+console.time("App Startup Time");
 class Main{
     async bootstrap(){
         const settings = await loadSettings();    
         await bootstrapApp.ignite(settings);
+        console.timeEnd("App Startup Time");
     };   
 };
 const app = new Main()

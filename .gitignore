@@ -1,6 +1,7 @@
 # Ignore node modules and build output 
 node_modules/
 dist/
+.vs
 
 # Angular Frontend servie
 ./frontend/node_modules/

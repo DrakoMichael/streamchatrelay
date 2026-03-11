@@ -7,11 +7,17 @@
   "type": "module",
   "main": "spamChatBot_WebSocketServer.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prisma:generate": "prisma generate --schema=src/prisma/schema.prisma",
+    "prisma:migrate": "prisma migrate dev --schema=src/prisma/schema.prisma"
   },
   "dependencies": {
+    "@prisma/client": "^7.4.2",
     "amqplib": "^0.10.9",
     "express": "^5.2.1",
     "ws": "^8.19.0"
+  },
+  "devDependencies": {
+    "prisma": "^7.4.2"
   }
 }
