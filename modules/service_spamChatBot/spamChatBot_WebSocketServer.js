@@ -1,4 +1,5 @@
 import { WebSocketServer } from 'ws';
+import { WebSocket } from 'ws';
 
 class spamChatBot_WebSocketServer {
   // singleton instance
@@ -25,7 +26,7 @@ class spamChatBot_WebSocketServer {
     this.pingInterval = conf.pingInterval || 2000; // default 5 seconds
     this.wss = null;
     this.clients = new Set(); // set of ws
-    this.pingTimers = new WeakMap(); // ws -> interval id
+    this.globalPing = null;
   }
 
   async _ignite(port = this.port) {
@@ -47,19 +48,20 @@ class spamChatBot_WebSocketServer {
   _handleConnection(ws) {
     this.clients.add(ws);
 
-    // start periodic ping for this connection
-    this.globalPing = setInterval(() => {
-    for (const client of this.clients) {
-        if (client.readyState === WebSocket.OPEN) {
+    if (!this.globalPing) {
+      this.globalPing = setInterval(() => {
+        for (const client of this.clients) {
+          if (client.readyState === WebSocket.OPEN) {
             client.send(JSON.stringify({ type: 'ping', timestamp: Date.now() }));
+          }
         }
+      }, this.pingInterval);
     }
-    }, this.pingInterval);
 
     ws.on('message', (message) => {
       // broadcast incoming message to all connected clients
       for (const client of this.clients) {
-        if (client.readyState === ws.OPEN) {
+        if (client.readyState === WebSocket.OPEN) {
           try { client.send(message); } catch (_) {}
         }
       }
@@ -67,10 +69,10 @@ class spamChatBot_WebSocketServer {
 
     const cleanup = () => {
       this.clients.delete(ws);
-      const t = this.pingTimers.get(ws);
-      if (t) {
-        clearInterval(t);
-        this.pingTimers.delete(ws);
+
+      if (this.clients.size === 0 && this.globalPing) {
+        clearInterval(this.globalPing);
+        this.globalPing = null;
       }
     };
 
@@ -80,6 +82,10 @@ class spamChatBot_WebSocketServer {
 
   async close() {
     if (!this.wss) return;
+    if (this.globalPing) {
+      clearInterval(this.globalPing);
+      this.globalPing = null;
+    }
     for (const client of this.clients) {
       try { client.close(); } catch (_) {}
     }
@@ -91,6 +97,22 @@ class spamChatBot_WebSocketServer {
         resolve();
       });
     });
+  }
+
+  broadcast(payload) {
+    const message = typeof payload === 'string' ? payload : JSON.stringify(payload);
+
+    for (const client of this.clients) {
+      if (client.readyState === WebSocket.OPEN) {
+        try {
+          client.send(message);
+        } catch (_) {}
+      }
+    }
+  }
+
+  getClientCount() {
+    return this.clients.size;
   }
 }
 
