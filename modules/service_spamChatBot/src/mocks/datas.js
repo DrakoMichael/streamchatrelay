@@ -1,43 +1,5 @@
-/**
- * @module src.services.spamGenerator.fakeMessageData
- */
-
-const fakeMessageData = {
-    plataforms: ["Youtube", "Twitch", "Facebook", "TikTok", "Instagram", "Discord", "Reddit", "Twitter", "LinkedIn", "Snapchat"
-  ],
-  nome: [
-    "Zephyr Quantum",
-    "Mika Sato",
-    "Bjorn Steinsonsoon",
-    "Lucia Romanescu",
-    "Dmitri Volkov",
-    "Amara Okafor",
-    "Isabella Moretti",
-    "Marcus Johannsen",
-    "Chen Wei",
-    "Pavel Sokolov",
-    "Yuki Tanaka",
-    "Fatima Al-Rashid",
-    "Priya Sharma",
-    "Hugo Bergström",
-    "Kai Nakamura",
-    "Elena Petrov",
-    "Javier Montoya",
-    "Asha Patel",
-    "Reno Fischer",
-    "Zara Mikhailov",
-    "Akira Kimura",
-    "Sofia Kovalenko",
-    "Leonardo Ferreira",
-    "Anaya Gupta",
-    "Viktor Smirnov",
-    "Leila Hassan",
-    "Erik Lunnqvist",
-    "Camila Santos",
-    "Adrian Krawczyk",
-    "Noor Farah"
-  ],
-  frases: [
+const datas = {
+  quotes: [
     "A borboleta azul dança com os números invisíveis.",
     "Когда картошка поёт, луна плачет.",
     "El gato verde se enamoró de una ecuación matemática.",
@@ -71,4 +33,4 @@ const fakeMessageData = {
   ]
 };
 
-export default fakeMessageData;
+export default datas;
