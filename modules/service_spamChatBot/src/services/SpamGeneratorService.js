@@ -3,12 +3,14 @@ import GeneratedMessageDTO from '../DTO/GeneratedMessageDTO.js';
 
 class SpamGeneratorService {
   generateMessage() {
-    const index = Math.floor(Math.random() * fakeMessageData.nome.length);
+    const NAME_INDEX = Math.floor(Math.random() * fakeMessageData.nome.length);
+    const PLATAFORM_INDEX = Math.floor(Math.random() * fakeMessageData.plataforms.length);
+    const PHRASE_INDEX = Math.floor(Math.random() * fakeMessageData.frases.length);
 
     return GeneratedMessageDTO.create({
-      plataforma: fakeMessageData.plataforms[Math.floor(Math.random() * fakeMessageData.plataforms.length)],
-      usuario: fakeMessageData.nome[index],
-      mensagem: fakeMessageData.frases[index],
+      plataforma: fakeMessageData.plataforms[PLATAFORM_INDEX],
+      usuario: fakeMessageData.nome[NAME_INDEX],
+      mensagem: fakeMessageData.frases[PHRASE_INDEX],
       timestamp: new Date().toISOString()
     });
   }
@@ -27,3 +29,4 @@ class SpamGeneratorService {
 }
 
 export default SpamGeneratorService;
+

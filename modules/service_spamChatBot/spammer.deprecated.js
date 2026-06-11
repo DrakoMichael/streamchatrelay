@@ -1,3 +1,5 @@
+// @deprecated
+
 import fakeMessageData from "./fakeMessageData.js";
 
 let loopIntervalId = null;
