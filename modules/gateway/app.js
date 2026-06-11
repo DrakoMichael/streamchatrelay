@@ -1,74 +1,66 @@
-import express from "express";
-import { createProxyMiddleware } from "http-proxy-middleware";
-import http from "http";
+import express from 'express';
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-/* =========
-   Middleware de auth (antes do proxy)
-   ========= */
-function auth(req, res, next) { 
-    //jwt não necessário por enquanto em módulos internos
-    //const token = req.headers.authorization;
-    //console.log("Token recebido:", token);
+const mockState = {
+  service: 'gateway',
+  version: '1.0.0',
+  startedAt: new Date().toISOString()
+};
 
-
-    //   if (!token) {
-    //     return res.status(401).json({ error: "Sem token" });
-    //   }
-
-    // valida JWT aqui
-    // jwt.verify(token, SECRET)
-
+function logRequest(req, _res, next) {
+  console.log(`[gateway] ${req.method} ${req.originalUrl}`);
   next();
 }
 
-const websocketService = createProxyMiddleware({
-  target: "http://localhost:3232", // serviço interno
-  changeOrigin: true,
-  pathRewrite: {
-    "^/": ""
-  }
+app.use(express.json());
+app.use(logRequest);
+
+app.get('/', (_req, res) => {
+  res.json({
+    ok: true,
+    message: 'Gateway mockup is running locally',
+    routes: ['/status', '/health', '/config']
+  });
 });
 
-const configProxy = createProxyMiddleware({
-  target: "http://localhost:3232/config",
-  changeOrigin: true,
-  pathRewrite: { "^/config": "" }
+app.get('/health', (_req, res) => {
+  res.json({ ok: true });
 });
 
-app.use("/config", auth, configProxy);
-app.use("/", auth, websocketService);
+app.get('/status', (_req, res) => {
+  res.json({
+    ok: true,
+    ...mockState
+  });
+});
 
+app.get('/config', (_req, res) => {
+  res.json({
+    ok: true,
+    port: PORT,
+    mode: 'local-mockup'
+  });
+});
 
-/* =========
-   Proxy WebSocket -> chat-service
-   ========= */
-// const chatProxy = createProxyMiddleware({
-//   target: "http://localhost:4001", // serviço interno
-//   changeOrigin: true,
-//   ws: true, // <<< mágica do websocket
-//   pathRewrite: {
-//     "^/ws/chat": ""
-//   }
-// });
+app.use((_req, res) => {
+  res.status(404).json({
+    ok: false,
+    error: 'Route not found'
+  });
+});
 
-// app.use("/ws/chat", auth, chatProxy);
+app.use((error, _req, res, _next) => {
+  console.error('[gateway] unexpected error:', error);
+  res.status(500).json({
+    ok: false,
+    error: 'Internal server error'
+  });
+});
 
-// /* =========
-//    HTTP normal também pode passar aqui
-//    ========= */
-// app.use("/api/chat", auth, chatProxy);
-
-const server = http.createServer(app);
-
-/* =========
-   Habilita upgrade WS
-   ========= */
-//server.on("upgrade", chatProxy.upgrade);
-
-server.listen(3000, () => {
-  console.log("Gateway rodando em 3000");
+app.listen(PORT, () => {
+  console.log(`Gateway mockup running on http://localhost:${PORT}`);
 });
 
 export default app;

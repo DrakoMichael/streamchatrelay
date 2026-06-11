@@ -18,6 +18,7 @@
     "dev": "node src/index.js"
   },
   "dependencies": {
+    "amqplib": "^1.0.3",
     "better-sqlite3": "^12.6.0",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
@@ -31,6 +32,8 @@
     "@eslint/css": "^0.14.1",
     "@eslint/js": "^9.39.2",
     "@eslint/json": "^0.14.0",
+    "@types/amqplib": "^0.10.8",
+    "@types/node": "^25.5.2",
     "cpy": "^11.0.0",
     "docdash": "^2.0.2",
     "esbuild": "^0.27.2",
