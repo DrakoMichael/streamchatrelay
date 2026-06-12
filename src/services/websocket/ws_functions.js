@@ -1,4 +1,6 @@
 import { WebSocket } from "ws";
+import messageAnalysis from "../dataAnalysis/messageAnalysis.js";
+import dataControl from "../dataControl/dataControl.js";
 
 /**
  * @author Michael Mello
@@ -23,6 +25,24 @@ export default class WsFunctions {
 
     ws.on("message", (msg) => this.onMessage(ws, msg));
     ws.on("close", () => this.onClose(ws));
+  }
+
+  onMessage(_ws, msg) {
+    const text = typeof msg === "string" ? msg : msg.toString();
+    const message = {
+      content: text,
+      sender: 'ws-client',
+      origin: 'websocket',
+      type: 'text',
+      timestamp: new Date().toISOString()
+    };
+
+    const registeredMessage = messageAnalysis.register(message);
+    dataControl('addMessage', registeredMessage);
+    this.broadcast(JSON.stringify({
+      type: 'chat-message',
+      data: registeredMessage
+    }));
   }
 
   onClose() {
@@ -50,6 +70,9 @@ export default class WsFunctions {
       case "broadcast":
         this.broadcast(payload);
         return true;
+
+      case 'analysis-summary':
+        return messageAnalysis.getSummary();
 
       default:
         return false;

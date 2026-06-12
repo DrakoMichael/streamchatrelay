@@ -51,6 +51,70 @@
                 </div>
             </div>
 
+            <!-- Quick Analysis Section -->
+            <section class="analysis-panel">
+                <div class="analysis-header">
+                    <span class="analysis-label">◉ QUICK DATA ANALYSIS</span>
+                    <span class="analysis-status" id="analysisStatus">Aguardando mensagens</span>
+                </div>
+
+                <div class="analysis-metrics">
+                    <article class="analysis-metric">
+                        <span class="analysis-metric-label">Mensagens</span>
+                        <strong class="analysis-metric-value" id="analysisTotal">0</strong>
+                    </article>
+                    <article class="analysis-metric">
+                        <span class="analysis-metric-label">Remetentes únicos</span>
+                        <strong class="analysis-metric-value" id="analysisSenders">0</strong>
+                    </article>
+                    <article class="analysis-metric">
+                        <span class="analysis-metric-label">Origens únicas</span>
+                        <strong class="analysis-metric-value" id="analysisOrigins">0</strong>
+                    </article>
+                    <article class="analysis-metric">
+                        <span class="analysis-metric-label">Última atualização</span>
+                        <strong class="analysis-metric-value analysis-metric-value-small" id="analysisUpdatedAt">--</strong>
+                    </article>
+                </div>
+
+                <div class="analysis-grid">
+                    <article class="analysis-card">
+                        <div class="analysis-card-header">
+                            <span>Top senders</span>
+                            <small id="analysisTopSender">Sem dados</small>
+                        </div>
+                        <ul class="analysis-list" id="analysisSendersList">
+                            <li class="analysis-list-empty">Nenhum remetente ainda</li>
+                        </ul>
+                    </article>
+
+                    <article class="analysis-card">
+                        <div class="analysis-card-header">
+                            <span>Top origins</span>
+                            <small id="analysisTopOrigin">Sem dados</small>
+                        </div>
+                        <ul class="analysis-list" id="analysisOriginsList">
+                            <li class="analysis-list-empty">Nenhuma origem ainda</li>
+                        </ul>
+                    </article>
+                </div>
+
+                <div class="analysis-footer">
+                    <div class="analysis-footer-item">
+                        <span class="analysis-footer-label">Último preview</span>
+                        <strong class="analysis-footer-value" id="analysisLastMessage">Sem mensagens recentes</strong>
+                    </div>
+                    <div class="analysis-footer-item">
+                        <span class="analysis-footer-label">Remetente dominante</span>
+                        <strong class="analysis-footer-value" id="analysisTopSenderFooter">Sem dados</strong>
+                    </div>
+                    <div class="analysis-footer-item">
+                        <span class="analysis-footer-label">Origem dominante</span>
+                        <strong class="analysis-footer-value" id="analysisTopOriginFooter">Sem dados</strong>
+                    </div>
+                </div>
+            </section>
+
             <!-- Ping Info Section -->
             <div class="ping-info-box">
                 <div class="ping-header">

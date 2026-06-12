@@ -1,63 +1,49 @@
 import fs from 'fs';
-import config from '../../config.json' with { type: 'json' };
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-export default function dataControl(param,data) {
-  // setInterval(() => {
-  //   addFile(`Data Analyses Log Entry at ${new Date().toISOString()}\n`);
-  // }, config.data_analysis.data_analysis_interval_ms);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const CHAT_LOG_PATH = path.join(__dirname, '../../logs/chat_log.txt');
+const DATA_ANALYSIS_LOG_PATH = path.join(__dirname, '../../logs/data_analyses_log.txt');
+const MAX_STORED_MESSAGES = 200;
 
+export default function dataControl(param, data) {
   switch (param) {
-    case 'addMessage': {
+    case 'addMessage':
       addChatToLog(data);
       break;
-    }
-    case 'default': {
-      // default case
+
+    default:
       break;
-    }
-  };
+  }
 }
 
-// function addNameToBanFile(params) {
-//   const logEntry = `${new Date().toISOString()} - ${params}\n`;
-//   fs.appendFileSync('../src/logs/ban_users.txt', logEntry);
-// }
-
-// function addNameToAdminFile(params) {
-//   const logEntry = `${new Date().toISOString()} - ${params}\n`;
-//   fs.appendFileSync('../src/logs/admin_users.txt', logEntry);
-// }
-
-// function addLineToLog(params) {
-//   fs.appendFileSync('../src/logs/data_analyses_log.txt', params);
-// }
-
+function addChatToLog(data) {
+  const logEntry = `${new Date().toISOString()} - ${JSON.stringify(data)}\n`;
+  fs.appendFileSync(CHAT_LOG_PATH, logEntry);
+  healthCheck('chat_log');
+}
 
 function healthCheck(typeLog) {
- switch (typeLog) {
+  switch (typeLog) {
+    case 'data_analysis':
+      fs.appendFileSync(DATA_ANALYSIS_LOG_PATH, `Health Check at ${new Date().toISOString()}\n`);
+      break;
 
-   case 'data_analysis':
-     fs.appendFileSync('../src/logs/data_analyses_log.txt', `Health Check at ${new Date().toISOString()}\n`);
-     break;
+    case 'chat_log':
+      if (fs.existsSync(CHAT_LOG_PATH)) {
+        const content = fs.readFileSync(CHAT_LOG_PATH, 'utf-8');
+        const lines = content.split('\n').filter((line) => line.trim() !== '');
 
-   case 'chat_log': {
-     const filePath = '../src/logs/chat_log.txt';
+        if (lines.length > MAX_STORED_MESSAGES) {
+          const lastLines = lines.slice(-MAX_STORED_MESSAGES);
+          fs.writeFileSync(CHAT_LOG_PATH, `${lastLines.join('\n')}\n`);
+        }
+      }
+      break;
 
-     if (fs.existsSync(filePath)) {
-       const content = fs.readFileSync(filePath, 'utf-8');
-       const lines = content.split('\n').filter(line => line.trim() !== '');
-       
-       if (lines.length > config.data_control.max_stored_messages) {
-         // Mantém apenas as últimas N linhas
-         const lastLines = lines.slice(-config.data_control.max_stored_messages);
-         fs.writeFileSync(filePath, lastLines.join('\n') + '\n');
-       }
-       
-     }
-     break;
-   }
-
-   default:
-     break;
- }
+    default:
+      break;
+  }
 }

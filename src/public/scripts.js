@@ -4,7 +4,6 @@
  */
 
 // Configuration
-const WS_URL = 'ws://localhost:8081';
 const MAX_CHAT_LENGTH = 50;
 
 // DOM Elements
@@ -12,6 +11,18 @@ const chatContainer = document.getElementById('chat');
 const statusIndicator = document.getElementById('connectionStatus');
 const statusText = document.getElementById('statusText');
 const messageCounter = document.getElementById('messageCount');
+const analysisTotal = document.getElementById('analysisTotal');
+const analysisSenders = document.getElementById('analysisSenders');
+const analysisOrigins = document.getElementById('analysisOrigins');
+const analysisLastMessage = document.getElementById('analysisLastMessage');
+const analysisTopSender = document.getElementById('analysisTopSender');
+const analysisTopOrigin = document.getElementById('analysisTopOrigin');
+const analysisTopSenderFooter = document.getElementById('analysisTopSenderFooter');
+const analysisTopOriginFooter = document.getElementById('analysisTopOriginFooter');
+const analysisUpdatedAt = document.getElementById('analysisUpdatedAt');
+const analysisStatus = document.getElementById('analysisStatus');
+const analysisSendersList = document.getElementById('analysisSendersList');
+const analysisOriginsList = document.getElementById('analysisOriginsList');
 const settingsBtn = document.getElementById('settingsBtn');
 const connectionsBtn = document.getElementById('connectionsBtn');
 const clearBtn = document.getElementById('clearBtn');
@@ -28,7 +39,10 @@ const state = {
   messageChart: null,
   messageCountPerInterval: 0,
   chartData: [], // Array de {time: timestamp, count: número}
-  chartUpdateInterval: null
+  chartUpdateInterval: null,
+  analysisRefreshInterval: null,
+  analysisRefreshTimeout: null,
+  analysisSnapshot: null
 };
 
 // DOM Elements for Ping
@@ -75,24 +89,269 @@ function waitForChart(callback, maxAttempts = 100) {
 /**
  * Inicializa a aplicação
  */
-function init() {
-  setupWebSocket();
+async function init() {
+  updateConnectionStatus('connecting');
+
+  const wsUrl = await resolveWebSocketUrl();
+  setupWebSocket(wsUrl);
   setupEventListeners();
+  await loadAnalysisSummary();
+  startAnalysisPolling();
   
   // Aguarda Chart.js estar disponível antes de inicializar o gráfico
   waitForChart(() => {
     setupMessageChart();
   });
-  
-  updateConnectionStatus('connecting');
+}
+
+function parseSocketMessage(rawData) {
+  if (typeof rawData !== 'string') {
+    return rawData;
+  }
+
+  const text = rawData.trim();
+  if (!text) {
+    return null;
+  }
+
+  if (text === 'conectado') {
+    return {
+      type: 'system',
+      text: 'Conectado ao relay de chat'
+    };
+  }
+
+  if (text.startsWith('{') || text.startsWith('[')) {
+    try {
+      const parsed = JSON.parse(text);
+      if (parsed?.type === 'chat-message' && parsed.data) {
+        return {
+          type: 'chat-message',
+          data: parsed.data
+        };
+      }
+
+      return parsed;
+    } catch (_error) {
+      // Trata como texto simples abaixo.
+    }
+  }
+
+  return {
+    type: 'chat-message',
+    data: {
+      content: text,
+      sender: 'unknown',
+      origin: 'websocket',
+      type: 'text',
+      timestamp: new Date().toISOString()
+    }
+  };
+}
+
+function normalizeMessagePayload(payload) {
+  if (!payload || typeof payload !== 'object') {
+    return {
+      content: String(payload ?? ''),
+      sender: 'unknown',
+      origin: 'unknown',
+      type: 'text',
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  return {
+    content: payload.content || payload.text || payload.message || '',
+    sender: payload.sender || payload.usuario || 'unknown',
+    origin: payload.origin || payload.plataforma || 'unknown',
+    type: payload.type || 'text',
+    timestamp: payload.timestamp || new Date().toISOString(),
+    id: payload.id || payload.messageId || null
+  };
+}
+
+function scheduleAnalysisRefresh() {
+  if (state.analysisRefreshTimeout) {
+    clearTimeout(state.analysisRefreshTimeout);
+  }
+
+  state.analysisRefreshTimeout = setTimeout(() => {
+    loadAnalysisSummary();
+  }, 1000);
+}
+
+async function loadAnalysisSummary() {
+  try {
+    if (analysisStatus) {
+      analysisStatus.textContent = 'Atualizando resumo...';
+    }
+
+    const response = await fetch('/api/analysis/summary', {
+      headers: {
+        Accept: 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const summary = payload?.data || payload;
+    state.analysisSnapshot = summary;
+    renderAnalysisSummary(summary);
+  } catch (error) {
+    console.warn('Falha ao carregar análise rápida:', error);
+    renderAnalysisSummary(state.analysisSnapshot);
+  }
+}
+
+function startAnalysisPolling() {
+  if (state.analysisRefreshInterval) {
+    clearInterval(state.analysisRefreshInterval);
+  }
+
+  state.analysisRefreshInterval = setInterval(() => {
+    loadAnalysisSummary();
+  }, 8000);
+}
+
+function formatSummaryValue(value) {
+  if (value === null || value === undefined || value === '') {
+    return '--';
+  }
+
+  if (typeof value === 'number') {
+    return value.toLocaleString('pt-BR');
+  }
+
+  return String(value);
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function renderLeaderList(container, entries, emptyLabel) {
+  if (!container) {
+    return;
+  }
+
+  const items = Array.isArray(entries) ? entries : [];
+
+  if (!items.length) {
+    container.innerHTML = `<li class="analysis-list-empty">${emptyLabel}</li>`;
+    return;
+  }
+
+  container.innerHTML = items
+    .map((entry, index) => `
+      <li class="analysis-list-item">
+        <span class="analysis-rank">${index + 1}</span>
+        <span class="analysis-name">${escapeHtml(entry.name || entry.label || 'unknown')}</span>
+        <span class="analysis-count">${escapeHtml(formatSummaryValue(entry.count ?? entry.value ?? 0))}</span>
+      </li>
+    `)
+    .join('');
+}
+
+function renderAnalysisSummary(summary) {
+  const data = summary || {};
+  const topSenders = Array.isArray(data.topSenders) ? data.topSenders : [];
+  const topOrigins = Array.isArray(data.topOrigins) ? data.topOrigins : [];
+  const uniqueSenders = Object.keys(data.bySender || {}).length;
+  const uniqueOrigins = Object.keys(data.byOrigin || {}).length;
+
+  if (analysisTotal) {
+    analysisTotal.textContent = formatSummaryValue(data.totalMessages);
+  }
+
+  if (analysisSenders) {
+    analysisSenders.textContent = formatSummaryValue(uniqueSenders);
+  }
+
+  if (analysisOrigins) {
+    analysisOrigins.textContent = formatSummaryValue(uniqueOrigins);
+  }
+
+  if (analysisLastMessage) {
+    analysisLastMessage.textContent = data.lastMessagePreview || 'Sem mensagens recentes';
+  }
+
+  if (analysisTopSender) {
+    const sender = topSenders[0];
+    analysisTopSender.textContent = sender ? `${sender.name} (${sender.count})` : 'Sem dados';
+  }
+
+  if (analysisTopOrigin) {
+    const origin = topOrigins[0];
+    analysisTopOrigin.textContent = origin ? `${origin.name} (${origin.count})` : 'Sem dados';
+  }
+
+  if (analysisTopSenderFooter) {
+    const sender = topSenders[0];
+    analysisTopSenderFooter.textContent = sender ? `${sender.name} (${sender.count})` : 'Sem dados';
+  }
+
+  if (analysisTopOriginFooter) {
+    const origin = topOrigins[0];
+    analysisTopOriginFooter.textContent = origin ? `${origin.name} (${origin.count})` : 'Sem dados';
+  }
+
+  if (analysisUpdatedAt) {
+    analysisUpdatedAt.textContent = data.lastMessageAt
+      ? new Date(data.lastMessageAt).toLocaleString('pt-BR')
+      : '--';
+  }
+
+  if (analysisStatus) {
+    analysisStatus.textContent = data.totalMessages
+      ? 'Resumo ativo'
+      : 'Aguardando mensagens';
+  }
+
+  renderLeaderList(analysisSendersList, topSenders, 'Nenhum remetente ainda');
+  renderLeaderList(analysisOriginsList, topOrigins, 'Nenhuma origem ainda');
+}
+
+/**
+ * Resolve a URL do WebSocket usando a configuração do backend.
+ */
+async function resolveWebSocketUrl() {
+  try {
+    const response = await fetch('/api/config');
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const config = await response.json();
+    const port = config.type_ambience === 'dev'
+      ? config.dev_config?.dev_websocket_port
+      : config.websocket_port;
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+
+    if (!port) {
+      throw new Error('WebSocket port not found in config');
+    }
+
+    return `${protocol}://${window.location.hostname}:${port}`;
+  } catch (error) {
+    console.warn('Usando porta padrão do WebSocket por falha ao ler a configuração:', error);
+    return `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}:8181`;
+  }
 }
 
 /**
  * Configura WebSocket
  */
-function setupWebSocket() {
+function setupWebSocket(wsUrl) {
   try {
-    state.socket = new WebSocket(WS_URL);
+    state.socket = new WebSocket(wsUrl);
 
     state.socket.onopen = () => {
       console.log('✓ Conectado ao servidor WebSocket');
@@ -102,7 +361,37 @@ function setupWebSocket() {
     };
 
     state.socket.onmessage = (event) => {
-      addMessage(event.data);
+      const payload = parseSocketMessage(event.data);
+
+      if (!payload) {
+        return;
+      }
+
+      if (payload.type === 'system') {
+        addSystemMessage(payload.text || 'Mensagem de sistema recebida');
+        return;
+      }
+
+      if (payload.type === 'chat-message') {
+        addMessage(payload.data);
+        scheduleAnalysisRefresh();
+        return;
+      }
+
+      if (payload.type === 'analysis-summary' && payload.data) {
+        state.analysisSnapshot = payload.data;
+        renderAnalysisSummary(payload.data);
+        return;
+      }
+
+      if (typeof payload === 'string') {
+        addMessage(payload);
+        scheduleAnalysisRefresh();
+        return;
+      }
+
+      addMessage(payload);
+      scheduleAnalysisRefresh();
     };
 
     state.socket.onerror = (error) => {
@@ -120,7 +409,7 @@ function setupWebSocket() {
       // Tenta reconectar depois de 5 segundos
       setTimeout(() => {
         if (!state.isConnected) {
-          setupWebSocket();
+          setupWebSocket(wsUrl);
         }
       }, 5000);
     };
@@ -212,11 +501,14 @@ function formatTime(date) {
 /**
  * Adiciona uma mensagem normal do chat
  */
-function addMessage(text) {
-  if (!text || typeof text !== 'string') return;
+function addMessage(message) {
+  const normalized = normalizeMessagePayload(message);
+  const content = normalized.content?.trim();
+
+  if (!content) return;
   
   // Filtra mensagens de ping
-  if (processPingMessage(text)) {
+  if (processPingMessage(content)) {
     return; // Não adiciona ao chat
   }
 
@@ -232,15 +524,42 @@ function addMessage(text) {
   // Adiciona ao estado
   state.messages.push({
     type: 'message',
-    text: text,
-    timestamp: new Date().toLocaleTimeString('pt-BR')
+    text: content,
+    sender: normalized.sender,
+    origin: normalized.origin,
+    timestamp: normalized.timestamp
   });
 
   // Adiciona ao DOM
-  const messageElement = document.createElement('p');
-  messageElement.textContent = text;
-  messageElement.className = 'chat-message';
+  const messageElement = document.createElement('div');
+  messageElement.className = 'chat-entry';
   messageElement.style.animation = 'slideInMessage 0.3s ease-out';
+
+  const messageHeader = document.createElement('div');
+  messageHeader.className = 'chat-entry-header';
+
+  const senderBadge = document.createElement('span');
+  senderBadge.className = 'chat-entry-sender';
+  senderBadge.textContent = normalized.sender;
+
+  const originBadge = document.createElement('span');
+  originBadge.className = 'chat-entry-origin';
+  originBadge.textContent = normalized.origin;
+
+  const timestampBadge = document.createElement('span');
+  timestampBadge.className = 'chat-entry-timestamp';
+  timestampBadge.textContent = new Date(normalized.timestamp).toLocaleTimeString('pt-BR');
+
+  const messageBody = document.createElement('p');
+  messageBody.className = 'chat-entry-content';
+  messageBody.textContent = content;
+
+  messageHeader.appendChild(senderBadge);
+  messageHeader.appendChild(originBadge);
+  messageHeader.appendChild(timestampBadge);
+
+  messageElement.appendChild(messageHeader);
+  messageElement.appendChild(messageBody);
   
   chatContainer.appendChild(messageElement);
   
@@ -255,12 +574,14 @@ function addMessage(text) {
  * Adiciona uma mensagem de sistema
  */
 function addSystemMessage(text) {
-  const messageElement = document.createElement('p');
-  messageElement.textContent = `[SISTEMA] ${text}`;
-  messageElement.className = 'system-message';
-  messageElement.style.color = 'var(--text-dim)';
-  messageElement.style.fontStyle = 'italic';
-  messageElement.style.opacity = '0.8';
+  const messageElement = document.createElement('div');
+  messageElement.className = 'chat-entry system-entry';
+
+  const messageBody = document.createElement('p');
+  messageBody.className = 'system-message';
+  messageBody.textContent = `[SISTEMA] ${text}`;
+
+  messageElement.appendChild(messageBody);
   
   chatContainer.appendChild(messageElement);
   chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -270,7 +591,7 @@ function addSystemMessage(text) {
  * Remove a mensagem mais antiga do DOM
  */
 function removeOldestMessageDOM() {
-  const firstMessage = chatContainer.querySelector('p');
+  const firstMessage = chatContainer.querySelector('.chat-entry');
   if (firstMessage) {
     firstMessage.style.animation = 'slideOutMessage 0.2s ease-in forwards';
     setTimeout(() => {
@@ -319,6 +640,7 @@ function clearChat() {
     state.messages = [];
     updateMessageCounter();
     addSystemMessage('Chat limpo');
+    scheduleAnalysisRefresh();
   }
 }
 
@@ -558,5 +880,21 @@ document.addEventListener('DOMContentLoaded', init);
 window.addEventListener('beforeunload', () => {
   if (state.socket && state.socket.readyState === WebSocket.OPEN) {
     state.socket.close();
+  }
+
+  if (state.pingIntervalId) {
+    clearInterval(state.pingIntervalId);
+  }
+
+  if (state.chartUpdateInterval) {
+    clearInterval(state.chartUpdateInterval);
+  }
+
+  if (state.analysisRefreshInterval) {
+    clearInterval(state.analysisRefreshInterval);
+  }
+
+  if (state.analysisRefreshTimeout) {
+    clearTimeout(state.analysisRefreshTimeout);
   }
 });

@@ -23,12 +23,11 @@ import sqlite3_bootstrap_memory from "../dataBase/sqlite3_bootstrap_memory.js";
 import websocket_bootstrap from "../websocket/websocket_bootstrap.js";
 import debugBootstrap from "./debugBootstrap.js";
 import logManager from "./logManager.js";
+import messageAnalysis from "../dataAnalysis/messageAnalysis.js";
+import dataControl from "../dataControl/dataControl.js";
 
 //modules
-import Spammer from '../../../modules/service_spamChatBot/spammer.js';
-
-//gateway
-import app from '../../../modules/gateway/app.js';
+import Spammer from '../../../modules/service_spamChatBot/spammer.deprecated.js';
 
 
 /**
@@ -82,11 +81,11 @@ class bootstrapApp {
    * @throws {Error} Throws error if any critical module fails
    */
   static async ignite(config) {
+    this.initializedModules = [];
     logManager.info('\n[BOOTSTRAP] Starting StreamChatRelay application...');
     
     try {
-      //gateway - need development
-      this.safeInit('Gateway Service', app, config);
+      let websocketInstance = null;
 
       if (config.database?.enable_database) {
         if (config.database.enable_in_disk_db) {
@@ -98,7 +97,7 @@ class bootstrapApp {
       }
 
       if (config.use_websocket) {
-        await this.safeInit('WebSocket Server', websocket_bootstrap.init, config);
+        websocketInstance = await this.safeInit('WebSocket Server', websocket_bootstrap.init, config);
       }
 
       if (config.use_webserver) {
@@ -111,7 +110,30 @@ class bootstrapApp {
 
       // Spam Generator must be initialized AFTER WebSocket
       if (config.dev_config?.enable_spam) {
-        const spammer = new Spammer(config);
+        const spamConfig = {
+          ...config,
+          send_message: (payload = {}) => {
+            const generatedMessage = payload?.data || {
+              content: payload?.formatted || '',
+              sender: 'dev-spammer',
+              origin: 'dev-spam-generator',
+              type: 'text',
+              timestamp: new Date().toISOString()
+            };
+
+            const registeredMessage = messageAnalysis.register(generatedMessage);
+            dataControl('addMessage', registeredMessage);
+
+            if (websocketInstance?.broadcast) {
+              websocketInstance.broadcast(JSON.stringify({
+                type: 'chat-message',
+                data: registeredMessage
+              }));
+            }
+          }
+        };
+
+        const spammer = new Spammer(spamConfig);
         spammer.start();
         this.initializedModules.push('Spam Generator');
       }
