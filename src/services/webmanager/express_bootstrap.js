@@ -3,11 +3,11 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { marked } from 'marked';
 import fs from 'fs';
+import { getExpressPort, loadConfig, saveConfig } from '../settings/configStore.js';
+import messageAnalysis from '../dataAnalysis/messageAnalysis.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const CONFIG_PATH = path.join(__dirname, '../../config.json');
 
 /**
  * @module src.services.webManager.express_bootstrap
@@ -28,13 +28,7 @@ export default async function express_bootstrap(config) {
             return null;
         }
 
-        let port = null;
-        
-        if(config.type_ambience === "dev") {
-            port = config.dev_config.dev_express_port;
-        } else {
-            port = config.express_port;
-        }
+        const port = getExpressPort(config);
 
         // Middleware para parsear JSON
         app.use(express.json());
@@ -58,13 +52,13 @@ export default async function express_bootstrap(config) {
         })
 
         app.get('/help', (_req, res) => {
-            const md = fs.readFileSync('../src/help.md', 'utf-8');
+            const md = fs.readFileSync(path.join(__dirname, '../../help.md'), 'utf-8');
             const html = marked(md);
             res.send(`<html><body>${html}</body></html>`);
         });
 
         app.get('/ajuda', async (_req, res) => {
-            const md = fs.readFileSync('../src/help_BR.md', 'utf-8');
+            const md = fs.readFileSync(path.join(__dirname, '../../help_BR.md'), 'utf-8');
             const html = marked(md);
             res.send(`<html lang="pt-BR"><title>Ajuda PT BR</title><body>${html}</body></html>`);
         });
@@ -77,8 +71,7 @@ export default async function express_bootstrap(config) {
          */
         app.get('/auth/twitch', async (_req, res) => {
             try {
-                const configData = await fs.promises.readFile(CONFIG_PATH, 'utf-8');
-                const currentConfig = JSON.parse(configData);
+                const currentConfig = await loadConfig();
                 
                 const clientId = currentConfig.twitch?.client_id;
                 
@@ -96,9 +89,7 @@ export default async function express_bootstrap(config) {
                 }
                 
                 // Get the port to construct redirect_uri
-                const port = currentConfig.type_ambience === "dev" 
-                    ? currentConfig.dev_config.dev_express_port 
-                    : currentConfig.express_port;
+                const port = getExpressPort(currentConfig);
                 
                 const redirectUri = `http://localhost:${port}/auth/callback`;
                 
@@ -170,8 +161,7 @@ export default async function express_bootstrap(config) {
                 }
                 
                 // Load current configuration
-                const configData = await fs.promises.readFile(CONFIG_PATH, 'utf-8');
-                const currentConfig = JSON.parse(configData);
+                const currentConfig = await loadConfig();
                 
                 const clientId = currentConfig.twitch?.client_id;
                 const clientSecret = currentConfig.twitch?.client_secret;
@@ -190,9 +180,7 @@ export default async function express_bootstrap(config) {
                 }
                 
                 // Get the port to construct redirect_uri
-                const port = currentConfig.type_ambience === "dev" 
-                    ? currentConfig.dev_config.dev_express_port 
-                    : currentConfig.express_port;
+                const port = getExpressPort(currentConfig);
                 
                 const redirectUri = `http://localhost:${port}/auth/callback`;
                 
@@ -223,7 +211,7 @@ export default async function express_bootstrap(config) {
                 currentConfig.twitch.refresh_token = tokenData.refresh_token || '';
                 
                 // Save updated configuration
-                await fs.promises.writeFile(CONFIG_PATH, JSON.stringify(currentConfig, null, 2), 'utf-8');
+                await saveConfig(currentConfig);
                 
                 // Send success response with instructions
                 res.send(`
@@ -312,11 +300,24 @@ export default async function express_bootstrap(config) {
         // API endpoint to get config
         app.get('/api/config', async (_req, res) => {
             try {
-                const configData = await fs.promises.readFile(CONFIG_PATH, 'utf-8');
-                const config = JSON.parse(configData);
+                const config = await loadConfig();
                 res.json(config);
             } catch (error) {
                 res.status(500).json({ error: 'Erro ao ler configurações: ' + error.message });
+            }
+        });
+
+        app.get('/api/analysis/summary', (_req, res) => {
+            try {
+                res.json({
+                    ok: true,
+                    data: messageAnalysis.getSummary()
+                });
+            } catch (error) {
+                res.status(500).json({
+                    ok: false,
+                    error: 'Erro ao gerar resumo de análise: ' + error.message
+                });
             }
         });
 
@@ -344,7 +345,7 @@ export default async function express_bootstrap(config) {
                 }
 
                 // Write config to file with pretty formatting
-                await fs.promises.writeFile(CONFIG_PATH, JSON.stringify(newConfig, null, 2), 'utf-8');
+                await saveConfig(newConfig);
                 
                 res.json({ success: true, message: 'Configurações salvas com sucesso' });
             } catch (error) {

@@ -14,7 +14,11 @@ class debugBootstrap {
      */
     static async init(config) {
         console.log("Debug Bootstrap initialized."); 
-        await websocket_bootstrap.ignite_test();
+        const websocketInstance = websocket_bootstrap.getInstance() ?? websocket_bootstrap.init(config);
+
+        if (!websocketInstance) {
+            throw new Error('WebSocket bootstrap is not available for debug mode.');
+        }
 
         // Initialize Twitch connection if enabled
         if (config.twitch?.enable_twitch_connection) {
